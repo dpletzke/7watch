@@ -1,0 +1,16 @@
+{
+  "name": "7watch-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "npm test",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "nedb-promises": "^4.1.1",
+    "simple-hl7": "^3.2.1"
+  }
+}
