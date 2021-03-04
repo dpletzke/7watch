@@ -1,25 +1,45 @@
 
-var hl7 = require('simple-hl7');
+const hl7 = require('simple-hl7');
 
-var app = hl7.tcp();
+const { HL7_INTERNAL_PORT, HL7_EXTERNAL_PORT } = require('./constants');
 
-app.use(function(req, res, next) {
+const server = hl7.tcp();
+
+const client = hl7.Server.createTcpClient({
+  host: 'localhost',
+  port: HL7_INTERNAL_PORT,
+  keepalive: true,
+  callback: (err, ack) => {
+    if (err) {
+      console.log("*******ERROR********");
+      console.log(err.message);
+    } else {
+      console.log(ack.log());
+    }
+  }
+});
+
+server.use((req, res, next) => {
   //req.msg is the HL7 message
   console.log('******message received*****')
   console.log(req.msg.log());
+
+  console.log('******message forwarded*****')
+  client.send(req.msg);
   next();
 })
 
-app.use(function(err, req, res, next) {
+server.use((err, req, res, next) => {
   //error handler
   //standard error middleware would be
   console.log('******ERROR*****')
   console.log(err);
-  var msa = res.ack.getSegment('MSA');
+  const msa = res.ack.getSegment('MSA');
   msa.setField(1, 'AR');
   res.ack.addSegment('ERR', err.message);
   res.end();
 });
 
 //Listen on port 7777
-app.start(7777);
+server.start(HL7_EXTERNAL_PORT);
+
