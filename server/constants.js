@@ -1,0 +1,6 @@
+
+
+module.exports = {
+  HL7_EXTERNAL_PORT: 7777,
+  HL7_INTERNAL_PORT: 7778
+}
