@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require("electron");
+const { electron, BrowserWindow } = require("electron");
 const isDev = require("electron-is-dev");
 const path = require("path");
 
@@ -37,7 +37,7 @@ function createWindow() {
 // Create a new browser window by invoking the createWindow
 // function once the Electron application is initialized.
 // Install REACT_DEVELOPER_TOOLS as well if isDev
-app.whenReady().then(() => {
+electron.whenReady().then(() => {
   if (isDev) {
     installExtension(REACT_DEVELOPER_TOOLS)
       .then((name) => console.log(`Added Extension:  ${name}`))
@@ -50,9 +50,9 @@ app.whenReady().then(() => {
 // Add a new listener that tries to quit the application when
 // it no longer has any open windows. This listener is a no-op
 // on macOS due to the operating system's window management behavior.
-app.on("window-all-closed", () => {
+electron.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
-    app.quit();
+    electron.quit();
   }
 });
 
@@ -60,7 +60,7 @@ app.on("window-all-closed", () => {
 // when the application has no visible windows after being activated.
 // For example, after launching the application for the first time,
 // or re-launching the already running application.
-app.on("activate", () => {
+electron.on("activate", () => {
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();
   }
