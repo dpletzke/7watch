@@ -12,6 +12,8 @@ const dbFactory = (fileName) => {
   });
 };
 
+// time, value, dvid
+
 const db = {
   // requests/ min for an hour
   // requests/ hour for a week
