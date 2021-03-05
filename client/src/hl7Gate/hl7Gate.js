@@ -1,6 +1,6 @@
 const hl7 = require("simple-hl7");
 
-const { HL7_INTERNAL_PORT } = require('../constants').config;
+const { HL7_INTERNAL_PORT } = require('../config').config;
 
 const server = hl7.tcp();
 
@@ -24,15 +24,20 @@ server.use(function (err, req, res, next) {
 });
 
 const startGate = () => {
-  console.log(`Client listening on port ${HL7_INTERNAL_PORT}`);
-  server.start(HL7_INTERNAL_PORT);
+  return new Promise((res, rej) => {
+    console.log(`Client listening for HL7 on port ${HL7_INTERNAL_PORT}`);
+    server.start(HL7_INTERNAL_PORT);
+  });
 };
 
 const stopGate = () => {
-  server.stop();
+  return new Promise((res, rej) => {
+    console.log(`Client has stopped listening for HL7`);
+    server.stop();
+  });
 };
 
-startGate();
+// startGate();
 
 module.export = {
   stopGate,
