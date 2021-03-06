@@ -15,22 +15,21 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import Dashboard from "./views/Dashboard.js";
-import UserProfile from "./views/UserProfile.js";
-import TableList from "./views/TableList.js";
-import Typography from "./views/Typography.js";
-import Icons from "./views/Icons.js";
-import Maps from "./views/Maps.js";
-import Notifications from "./views/Notifications.js";
-import Upgrade from "./views/Upgrade.js";
+import Dashboard from "./views/Dashboard";
+import UserProfile from "./views/UserProfile";
+import TableList from "./views/TableList";
+import Typography from "./views/Typography";
+import Icons from "./views/Icons";
+import Notifications from "./views/Notifications";
+import Config from "./views/Config";
 
 const dashboardRoutes = [
   {
     upgrade: true,
     path: "/upgrade",
-    name: "Upgrade to PRO",
+    name: "Placeholder",
     icon: "nc-icon nc-alien-33",
-    component: Upgrade,
+    component: (<div />),
     layout: "/admin",
   },
   {
@@ -69,17 +68,17 @@ const dashboardRoutes = [
     layout: "/admin",
   },
   {
-    path: "/maps",
-    name: "Maps",
-    icon: "nc-icon nc-pin-3",
-    component: Maps,
-    layout: "/admin",
-  },
-  {
     path: "/notifications",
     name: "Notifications",
     icon: "nc-icon nc-bell-55",
     component: Notifications,
+    layout: "/admin",
+  },
+  {
+    path: "/configuration",
+    name: "Configuration",
+    icon: "nc-icon nc-settings-gear-64",
+    component: Config,
     layout: "/admin",
   },
 ];
