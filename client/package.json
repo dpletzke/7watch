@@ -7,6 +7,7 @@
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^12.8.1",
+    "chartist": "^0.11.4",
     "cross-env": "^7.0.3",
     "electron-is-dev": "^1.2.0",
     "node-sass": "^5.0.0",
@@ -17,6 +18,7 @@
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
+    "reactstrap": "^8.9.0",
     "simple-hl7": "^3.2.1",
     "web-vitals": "^1.1.0"
   },
@@ -60,10 +62,12 @@
   "main": "./public/electron.js",
   "build": {
     "appId": "com.electron.my_app",
-    "productName": "My App",
+    "productName": "7watch",
     "files": [
       "build/**/*",
-      "node_modules/**/*"
+      "node_modules/**/*",
+      "src/assets/**/*",
+      "src/layouts/*"
     ],
     "directories": {
       "buildResources": "public"

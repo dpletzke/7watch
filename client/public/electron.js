@@ -2,6 +2,8 @@ const { app: electron, BrowserWindow } = require("electron");
 const isDev = require("electron-is-dev");
 const path = require("path");
 
+// process.env.ELECTRON_FORCE_WINDOW_MENU_BAR = true;
+
 // Conditionally include the dev tools installer to load React Dev Tools
 let installExtension, REACT_DEVELOPER_TOOLS;
 
