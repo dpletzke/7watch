@@ -17,7 +17,7 @@ server.use(function (err, req, res, next) {
   //standard error middleware would be
   console.log("******ERROR*****");
   console.log(err);
-  var msa = res.ack.getSegment("MSA");
+  const msa = res.ack.getSegment("MSA");
   msa.setField(1, "AR");
   res.ack.addSegment("ERR", err.message);
   res.end();
