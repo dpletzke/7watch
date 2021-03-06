@@ -19,8 +19,8 @@ function Notifications() {
   const [showModal, setShowModal] = React.useState(false);
   const notificationAlertRef = React.useRef(null);
   const notify = (place) => {
-    var color = Math.floor(Math.random() * 5 + 1);
-    var type;
+    const color = Math.floor(Math.random() * 5 + 1);
+    let type;
     switch (color) {
       case 1:
         type = "primary";
@@ -40,8 +40,7 @@ function Notifications() {
       default:
         break;
     }
-    var options = {};
-    options = {
+    const options = {
       place: place,
       message: (
         <div>
