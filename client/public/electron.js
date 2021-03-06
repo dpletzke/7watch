@@ -1,4 +1,4 @@
-const { app: electron, BrowserWindow } = require("electron");
+const { app: electron, BrowserWindow, shell } = require("electron");
 const isDev = require("electron-is-dev");
 const path = require("path");
 
@@ -29,6 +29,11 @@ function createWindow() {
       ? "http://localhost:3000"
       : `file://${path.join(__dirname, "../build/index.html")}`
   );
+
+  mainWindow.webContents.on('new-window', (e, url) => {
+    e.preventDefault();
+    shell.openExternal(url);
+  });
 
   // Open DevTools if in dev mode
   if (isDev) {
