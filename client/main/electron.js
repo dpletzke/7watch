@@ -2,7 +2,11 @@ const { app: electron, BrowserWindow, shell } = require("electron");
 const isDev = require("electron-is-dev");
 const path = require("path");
 
-// process.env.ELECTRON_FORCE_WINDOW_MENU_BAR = true;
+// runs gate event listeners
+require("./hl7Gate");
+
+process.env.ELECTRON_FORCE_WINDOW_MENU_BAR = true;
+// process.env.ELECTRON_OVERRIDE_DIST_PATH =
 
 // Conditionally include the dev tools installer to load React Dev Tools
 let installExtension, REACT_DEVELOPER_TOOLS;
@@ -15,8 +19,8 @@ if (isDev) {
 
 function createWindow() {
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1024,
+    height: 768,
     webPreferences: {
       nodeIntegration: true,
     },
@@ -30,7 +34,8 @@ function createWindow() {
       : `file://${path.join(__dirname, "../build/index.html")}`
   );
 
-  mainWindow.webContents.on('new-window', (e, url) => {
+  // any new windows that are opened (ie with a web link) open in default browser
+  mainWindow.webContents.on("new-window", (e, url) => {
     e.preventDefault();
     shell.openExternal(url);
   });

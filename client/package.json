@@ -59,9 +59,9 @@
     "wait-on": "^5.2.1"
   },
   "homepage": "./",
-  "main": "./public/electron.js",
+  "main": "./main/electron.js",
   "build": {
-    "appId": "com.electron.my_app",
+    "appId": "com.electron.7watch",
     "productName": "7watch",
     "files": [
       "build/**/*",
