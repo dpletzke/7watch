@@ -22,6 +22,7 @@ import Typography from "./views/Typography";
 import Icons from "./views/Icons";
 import Notifications from "./views/Notifications";
 import Config from "./views/Config";
+import Logs from "./views/Logs";
 
 const dashboardRoutes = [
   {
@@ -79,6 +80,13 @@ const dashboardRoutes = [
     name: "Configuration",
     icon: "nc-icon nc-settings-gear-64",
     component: Config,
+    layout: "/admin",
+  },
+  {
+    path: "/logs",
+    name: "Hl7 Logs",
+    icon: "nc-icon nc-single-copy-04",
+    component: Logs,
     layout: "/admin",
   },
 ];
