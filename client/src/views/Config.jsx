@@ -7,7 +7,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
 import { specifyConfig, config } from "../config";
-import { stopGate, startGate } from "../hl7Gate/hl7Gate";
+import { stopGate, startGate } from "../helpers/rendererHelpers";
 
 function Config() {
   const [formConfig, setFormConfig] = useState(() => {
@@ -20,7 +20,8 @@ function Config() {
     };
   });
 
-  const handleSubmit = async () => {
+  const handleSubmit = async(e) => {
+    e.preventDefault();
     specifyConfig({ formConfig });
     await stopGate();
     startGate();
@@ -31,14 +32,6 @@ function Config() {
       return { ...prev, [e.target.name]: e.target.value };
     });
   };
-
-  // set/change port client is listening for hl7/ server is sending to
-  // internal
-  // set/change port server is listening for hl7
-  // external
-
-  // set/change server hostname, we set this to know where to send our
-  // requests, defaults to localhost
 
   const input = ({ label, type, name, onChange }) => {
     return (
@@ -91,20 +84,18 @@ function Config() {
     <>
       <Container fluid>
         <Row>
-          <Col md="8">
+          <Col md="4">
             <Card>
               <Card.Header>
                 <Card.Title as="h4">Set Configuration</Card.Title>
               </Card.Header>
               <Card.Body>
-                <Form>
+                <Form onSubmit={handleSubmit}>
                   {configOptions.map((co) => input(co))}
                   <Button
                     className="btn-fill pull-right"
                     type="submit"
                     variant="warning"
-                    onSubmit={handleSubmit}
-                    onChange={handleChange}
                   >
                     Commit Changes
                   </Button>
@@ -113,7 +104,7 @@ function Config() {
               </Card.Body>
             </Card>
           </Col>
-          <Col md="4"></Col>
+          <Col md="8"></Col>
         </Row>
       </Container>
     </>
