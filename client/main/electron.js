@@ -3,7 +3,6 @@ const isDev = require("electron-is-dev");
 const path = require("path");
 
 // runs gate event listeners
-require("./hl7Gate");
 
 process.env.ELECTRON_FORCE_WINDOW_MENU_BAR = true;
 // process.env.ELECTRON_OVERRIDE_DIST_PATH =
@@ -17,32 +16,35 @@ if (isDev) {
   REACT_DEVELOPER_TOOLS = devTools.REACT_DEVELOPER_TOOLS;
 }
 
+let win;
+
 function createWindow() {
-  const mainWindow = new BrowserWindow({
+  win = new BrowserWindow({
     width: 1024,
     height: 768,
     webPreferences: {
       nodeIntegration: true,
     },
   });
+  require("./hl7Gate")(win);
 
   // Load from localhost if in development
   // Otherwise load index.html file
-  mainWindow.loadURL(
+  win.loadURL(
     isDev
       ? "http://localhost:3000"
       : `file://${path.join(__dirname, "../build/index.html")}`
   );
 
   // any new windows that are opened (ie with a web link) open in default browser
-  mainWindow.webContents.on("new-window", (e, url) => {
+  win.webContents.on("new-window", (e, url) => {
     e.preventDefault();
     shell.openExternal(url);
   });
 
   // Open DevTools if in dev mode
   if (isDev) {
-    mainWindow.webContents.openDevTools({ mode: "detach" });
+    win.webContents.openDevTools({ mode: "detach" });
   }
 }
 
@@ -80,3 +82,7 @@ electron.on("activate", () => {
 
 // The code above has been adapted from a starter example in the Electron docs:
 // https://www.electronjs.org/docs/tutorial/quick-start#create-the-main-script-file
+
+module.exports = {
+  win,
+};
