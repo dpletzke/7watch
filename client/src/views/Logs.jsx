@@ -14,19 +14,11 @@ import Col from "react-bootstrap/Col";
 import { useLogsStore } from "../contexts/logsContext";
 
 import { normalizeMsg } from "../helpers/msgProcessing";
+import { useObserver } from "mobx-react-lite";
 
-const { ipcRenderer } = window.require("electron");
 
 function Logs() {
   const logsStore = useLogsStore();
-
-  useEffect(() => {
-    ipcRenderer.on("msg_recieved", (e, msg) => {
-      console.log(msg);
-
-      logsStore.addLog(msg);
-    });
-  }, [logsStore]);
 
   const logRow = (data) => {
     const msg = normalizeMsg(data);
@@ -49,7 +41,7 @@ function Logs() {
     );
   };
 
-  return (
+  return useObserver(() => (
     <>
       <Container fluid>
         <Row>
@@ -77,7 +69,7 @@ function Logs() {
         </Row>
       </Container>
     </>
-  );
+  ));
 }
 
 export default Logs;
