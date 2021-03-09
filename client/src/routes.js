@@ -23,6 +23,7 @@ import Icons from "./views/Icons";
 import Notifications from "./views/Notifications";
 import Config from "./views/Config";
 import Logs from "./views/Logs";
+import Grid from "./views/Grid";
 
 const dashboardRoutes = [
   {
@@ -30,7 +31,7 @@ const dashboardRoutes = [
     path: "/upgrade",
     name: "Placeholder",
     icon: "nc-icon nc-alien-33",
-    component: (<div />),
+    component: <div />,
     layout: "/admin",
   },
   {
@@ -38,6 +39,13 @@ const dashboardRoutes = [
     name: "Dashboard",
     icon: "nc-icon nc-chart-pie-35",
     component: Dashboard,
+    layout: "/admin",
+  },
+  {
+    path: "/grid",
+    name: "Grid",
+    icon: "nc-icon nc-grid-45",
+    component: Grid,
     layout: "/admin",
   },
   {
