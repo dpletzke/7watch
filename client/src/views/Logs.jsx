@@ -13,21 +13,19 @@ import Col from "react-bootstrap/Col";
 
 import { useLogsStore } from "../contexts/logsContext";
 
-import { normalizeMsg } from "../helpers/msgProcessing";
 import { useObserver } from "mobx-react-lite";
 
 
 function Logs() {
   const logsStore = useLogsStore();
 
-  const logRow = (data) => {
-    const msg = normalizeMsg(data);
+  const logRow = (msg) => {
 
     const obr = msg.segments.find((sg) => sg.name === "OBR");
     const obxs = msg.segments.filter((sg) => sg.name === "OBX");
-    console.log({ data, obr, obxs });
+    console.log({ msg, obr, obxs });
     return (
-      <tr key={data.id}>
+      <tr key={msg.id}>
         <td>{msg.header.fields.sentTimeStamp}</td>
         <td>{obr.fields.observationTimeStamp}</td>
         <td>{obr.fields.collectorIdentifier}</td>

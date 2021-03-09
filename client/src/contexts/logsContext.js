@@ -1,6 +1,8 @@
 import React from "react";
 import { createLogsStore } from "./logsStore";
-import { useLocalStore } from "mobx-react-lite";
+import { useLocalObservable } from "mobx-react-lite";
+
+import { normalizeMsg } from "../helpers/msgProcessing";
 
 const { ipcRenderer } = window.require("electron");
 
@@ -8,13 +10,13 @@ const { ipcRenderer } = window.require("electron");
 const LogsContext = React.createContext(null);
 
 export const LogsProvider = ({ children }) => {
-  const logsStore = useLocalStore(createLogsStore);
+  const logsStore = useLocalObservable(createLogsStore);
 
   React.useEffect(() => {
     const addLogListener = (e, msg) => {
       console.log(msg);
 
-      logsStore.addLog(msg);
+      logsStore.addLog(normalizeMsg(msg));
     };
 
     ipcRenderer.on("msg_recieved", addLogListener);
