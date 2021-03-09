@@ -25,10 +25,13 @@ import Button from "react-bootstrap/Button";
 
 import routes from "../../routes.js";
 import Badge from "react-bootstrap/Badge";
-import { gateStarted } from "../../helpers/rendererHelpers";
+import { useGateStore } from "../../contexts";
+import { useObserver } from "mobx-react-lite";
 
 function Header() {
   const location = useLocation();
+  const gate = useGateStore();
+
   const mobileSidebarToggle = (e) => {
     e.preventDefault();
     document.documentElement.classList.toggle("nav-open");
@@ -49,7 +52,7 @@ function Header() {
     }
     return "Brand";
   };
-  return (
+  return useObserver(() => (
     <Navbar bg="light" expand="lg">
       <Container fluid>
         <div className="d-flex justify-content-center align-items-center ml-2 ml-lg-0">
@@ -76,18 +79,18 @@ function Header() {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="nav ml-auto" navbar>
             <Nav.Item>
-                Gate: {" "}
-                {gateStarted ? (
-                  <Badge variant="primary">OPEN</Badge>
-                ) : (
-                  <Badge variant="secondary">Closed</Badge>
-                )}
+              Gate:{" "}
+              {gate.isOpen ? (
+                <Badge variant="primary">OPEN</Badge>
+              ) : (
+                <Badge variant="secondary">CLOSED</Badge>
+              )}
             </Nav.Item>
           </Nav>
         </Navbar.Collapse>
       </Container>
     </Navbar>
-  );
+  ));
 }
 
 export default Header;

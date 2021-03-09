@@ -7,9 +7,10 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
 import { specifyConfig, config } from "../config";
-import { stopGate, startGate } from "../helpers/rendererHelpers";
+import { useGateStore } from "../contexts";
 
 function Config() {
+  const gate = useGateStore();
   const [formConfig, setFormConfig] = useState(() => {
     return {
       exHl7Port: config.HL7_EXTERNAL_PORT,
@@ -20,11 +21,12 @@ function Config() {
     };
   });
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     specifyConfig({ formConfig });
-    await stopGate();
-    startGate();
+    console.log({ gate });
+    await gate.close();
+    gate.open();
   };
 
   const handleChange = (e) => {
@@ -97,14 +99,38 @@ function Config() {
                     type="submit"
                     variant="warning"
                   >
-                    Commit Changes
+                    Commit and Restart Changes
                   </Button>
                   <div className="clearfix"></div>
                 </Form>
               </Card.Body>
             </Card>
           </Col>
-          <Col md="8"></Col>
+          <Col md="4">
+            <Card>
+              <Card.Header>
+              <Card.Title as="h4">Gate Controls</Card.Title>
+              </Card.Header>
+              <Card.Body>
+                <Button
+                  className="btn-fill pull-right"
+                  type="submit"
+                  variant="warning"
+                  onClick={() => gate.open()}
+                >
+                  Open Gate
+                </Button>
+                <Button
+                  className="btn-fill pull-right"
+                  type="submit"
+                  variant="warning"
+                  onClick={() => gate.close()}
+                >
+                  Close Gate
+                </Button>
+              </Card.Body>
+            </Card>
+          </Col>
         </Row>
       </Container>
     </>
