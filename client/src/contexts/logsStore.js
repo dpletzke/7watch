@@ -1,16 +1,17 @@
-import {nanoid} from 'nanoid'
+import { nanoid } from "nanoid";
 
-export function createLogsStore(){
+export function createLogsStore() {
   return {
     logs: [],
-    addLog(log){
-      console.log(log, this.logs)
+    addLog(log) {
+      console.log(log, this.logs);
       this.logs.push({
-        ...log, id: nanoid()
-      })
+        ...log,
+        id: nanoid(),
+      });
     },
-    removeLog(id){
-      this.logs = this.logs.filter(log => log.id !== id)
-    }
-  }
+    removeLog(id) {
+      this.logs = this.logs.filter((log) => log.id !== id);
+    },
+  };
 }

@@ -6,7 +6,6 @@ import { normalizeMsg } from "../helpers/msgProcessing";
 
 const { ipcRenderer } = window.require("electron");
 
-
 const LogsContext = React.createContext(null);
 
 export const LogsProvider = ({ children }) => {
@@ -14,8 +13,6 @@ export const LogsProvider = ({ children }) => {
 
   React.useEffect(() => {
     const addLogListener = (e, msg) => {
-      console.log(msg);
-
       logsStore.addLog(normalizeMsg(msg));
     };
 

@@ -9,14 +9,14 @@ export const GateProvider = ({ children }) => {
   const gateStore = useLocalObservable(() => {
     return {
       isOpen: false,
-      open: async function() {
-        if(!this.isOpen) {
+      open: async function () {
+        if (!this.isOpen) {
           await ipcRenderer.invoke("start_gate", config);
           this.isOpen = true;
         }
       },
-      close: async function() {
-        if(this.isOpen) {
+      close: async function () {
+        if (this.isOpen) {
           await ipcRenderer.invoke("stop_gate");
           this.isOpen = false;
         }
@@ -30,18 +30,3 @@ export const GateProvider = ({ children }) => {
 };
 
 export const useGateStore = () => React.useContext(GateContext);
-
-// createLogsStore(){
-//   return {
-//     logs: [],
-//     addLog(log){
-//       console.log(log, this.logs)
-//       this.logs.push({
-//         ...log, id: nanoid()
-//       })
-//     },
-//     removeLog(id){
-//       this.logs = this.logs.filter(log => log.id !== id)
-//     }
-//   }
-// }
