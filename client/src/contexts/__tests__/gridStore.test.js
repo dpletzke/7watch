@@ -1,7 +1,5 @@
 import { createGridStore } from "../gridStore";
 
-const gridStore = createGridStore();
-
 const testObservations = [
   {
     id: 2,
@@ -38,8 +36,12 @@ const testDevices = [
 ];
 
 test("addObservations correctly appends to observations and grid", () => {
+  const gridStore = createGridStore();
+
   gridStore.addDevices(testDevices);
   gridStore.addObservations(testObservations);
+  const gridKeys = Array.from(gridStore.grid.keys());
+  const gridValues = Array.from(gridStore.grid.values());
 
   expect(Object.keys(gridStore.observations).length).toEqual(
     testObservations.length
@@ -47,20 +49,24 @@ test("addObservations correctly appends to observations and grid", () => {
   expect(gridStore.grid.size).toEqual(
     testDevices.length * testObservations.length
   );
-  expect(gridStore.grid.keys()).toContain("CARDBAY2-519");
-  expect(gridStore.grid.keys()).toContain("CARDSTRESSRM5-2");
-  expect(gridStore.grid.values().every((val) => !val)).toBeTrue();
+  expect(gridKeys).toContain("CARDBAY2-519");
+  expect(gridKeys).toContain("CARDSTRESSRM5-2");
+  expect(gridValues.every((val) => val === null)).toBe(true);
 });
 
 test("addDevices correctly appends to devices and grid", () => {
+  const gridStore = createGridStore();
+
   gridStore.addObservations(testObservations);
   gridStore.addDevices(testDevices);
+  const gridKeys = Array.from(gridStore.grid.keys());
+  const gridValues = Array.from(gridStore.grid.values());
 
   expect(gridStore.deviceIds.length).toEqual(testDevices.length);
   expect(gridStore.grid.size).toEqual(
     testDevices.length * testObservations.length
   );
-  expect(gridStore.grid.keys()).toContain("CARDBAY2-519");
-  expect(gridStore.grid.keys()).toContain("CARDSTRESSRM5-2");
-  expect(gridStore.grid.values().every((val) => !val)).toBeTrue();
+  expect(gridKeys).toContain("CARDBAY2-519");
+  expect(gridKeys).toContain("CARDSTRESSRM5-2");
+  expect(gridValues.every((val) => val === null)).toBe(true);
 });

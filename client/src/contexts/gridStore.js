@@ -26,37 +26,32 @@ export function createGridStore() {
      */
     addDevices: function (newDeviceIds) {
       this.deviceIds.push(...newDeviceIds);
-      const addGridRows = newDeviceIds.reduce((acc, dId) => {
-        acc.push(
-          ...Object.keys(this.observations).map((obId) => {
-            return [`${dId}-${obId}`, null];
-          })
-        );
-        return acc;
-      }, []);
-      console.log(addGridRows);
-      this.grid.set(addGridRows);
+      const observationIds = Object.keys(this.observations);
+      newDeviceIds.forEach((dId) => {
+        observationIds.forEach((obId) => {
+          this.grid.set(`${dId}-${obId}`, null);
+        });
+      });
     },
     /**
      * Add observations to global tracker and add row elements for
      * each device with a starting value of null
      * @param {Obervations[]} newObservations - new observations to track
-     * @see {@link observations}
+     * @see observations
      */
     addObservations: function (newObservations) {
-      this.observations = { ...this.observations, ...newObservations };
-      const addGridColumns = Object.keys(newObservations).reduce(
-        (acc, obId) => {
-          acc.push(
-            ...this.deviceIds.map((dId) => {
-              return [`${dId}-${obId}`, null];
-            })
-          );
+      this.observations = newObservations.reduce(
+        (acc, observation) => {
+          acc[observation.id] = observation;
           return acc;
         },
-        []
+        { ...this.observations }
       );
-      this.grid.set(addGridColumns);
+      newObservations.forEach(({ id: obId }) => {
+        this.deviceIds.forEach((dId) => {
+          this.grid.set(`${dId}-${obId}`, null);
+        });
+      });
     },
     updateValue: function (deviceId, observationId, value) {
       const key = `${deviceId}-${observationId}`;
