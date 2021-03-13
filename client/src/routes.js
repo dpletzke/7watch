@@ -23,7 +23,7 @@ import Icons from "./views/Icons";
 import Notifications from "./views/Notifications";
 import Config from "./views/Config";
 import Logs from "./views/Logs";
-import Grid from "./views/Grid";
+import GridView from "./views/GridView";
 
 const dashboardRoutes = [
   {
@@ -45,7 +45,7 @@ const dashboardRoutes = [
     path: "/grid",
     name: "Grid",
     icon: "nc-icon nc-grid-45",
-    component: Grid,
+    component: GridView,
     layout: "/admin",
   },
   {

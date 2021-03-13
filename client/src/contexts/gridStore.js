@@ -54,9 +54,17 @@ export function createGridStore() {
       });
     },
     updateValue: function (deviceId, observationId, value) {
+      if (!Object.keys(this.observations).includes(observationId)) {
+        // suggest to user to add new observation
+        throw new Error("no valid entry for observation");
+      }
+      if (!this.deviceIds.includes(deviceId)) {
+        // suggest to user to add new device
+        throw new Error("no valid entry for device");
+      }
       const key = `${deviceId}-${observationId}`;
       if (!this.grid.has(key)) {
-        throw new Error("no valid entry for device-observation");
+        throw new Error("Error: invalid in-memory datastore");
       }
       this.grid.set(key, value);
     },

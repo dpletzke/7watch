@@ -15,7 +15,11 @@ export const GridProvider = ({ children }) => {
     // TODO provide events and a gui tracker for when new devices or observations come through the track
     const newObservationListener = (e, msg) => {
       const { deviceId, observationId, value } = msg;
-      gridStore.updateValue(deviceId, observationId, value);
+      try {
+        gridStore.updateValue(deviceId, observationId, value);
+      } catch (err) {
+        console.error(err);
+      }
     };
 
     ipcRenderer.on("observation", newObservationListener);
