@@ -13,12 +13,12 @@ export function createGridStore() {
     deviceIds: [],
     /**
      * track observation types known as OBX-3 in the HL7 protocol
-     * @property {object} [obId] - observation id, the OBX-3 identifier
+     * @type {Map<number, Object>} - observation Ids
      * @property {number} [obId].id - the OBX-3 identifier
-     * @property {number} [obId].common - a short, unique name
-     * @property {number} [obId].full - the full name
+     * @property {string} [obId].common - a short, unique name
+     * @property {string} [obId].full - the full name
      */
-    observations: {},
+    observations: new Map(),
     /**
      * Add device ids to global tracker and add grid columns for
      * each device/observation type with a starting value of null
@@ -26,7 +26,7 @@ export function createGridStore() {
      */
     addDevices: function (newDeviceIds) {
       this.deviceIds.push(...newDeviceIds);
-      const observationIds = Object.keys(this.observations);
+      const observationIds = this.observations.keys();
       newDeviceIds.forEach((dId) => {
         observationIds.forEach((obId) => {
           this.grid.set(`${dId}-${obId}`, null);
@@ -40,7 +40,7 @@ export function createGridStore() {
      * @see observations
      */
     addObservations: function (newObservations) {
-      this.observations = newObservations.reduce(
+      newObservations.forEach(
         (acc, observation) => {
           acc[observation.id] = observation;
           return acc;
@@ -74,6 +74,11 @@ export function createGridStore() {
         throw new Error("no valid entry for device-observation");
       }
       return this.grid.get(key);
+    },
+    getIds: function (deviceIdIndex, observationIdIndex) {
+      const deviceId = this.deviceIds[deviceIdIndex];
+      const observationId = this.observations.keys()[observationIdIndex];
+      return [deviceId, observationId];
     },
   };
 }
