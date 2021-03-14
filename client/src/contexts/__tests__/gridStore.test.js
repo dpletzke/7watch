@@ -68,3 +68,51 @@ test("addDevices correctly appends to devices and grid", () => {
   expect(gridKeys).toContain("CARDSTRESSRM5-2");
   expect(gridValues.every((val) => val === null)).toBe(true);
 });
+
+test("Can get ids", () => {
+  const gridStore = createGridStore();
+
+  gridStore.addObservations(testObservations);
+  gridStore.addDevices(testDevices);
+
+  const [deviceId, observationId] = gridStore.getIds(2, 2);
+
+  expect(deviceId).toEqual("CARDECHO");
+  expect(observationId).toEqual(4);
+});
+
+test("Can get observation values as null before setting", () => {
+  const gridStore = createGridStore();
+
+  gridStore.addObservations(testObservations);
+  gridStore.addDevices(testDevices);
+
+  const [deviceId, observationId] = gridStore.getIds(2, 2);
+  const value = gridStore.getValue(deviceId, observationId);
+
+  expect(value).toEqual(null);
+});
+
+test("Can get observation values as value after setting", () => {
+  const gridStore = createGridStore();
+
+  gridStore.addObservations(testObservations);
+  gridStore.addDevices(testDevices);
+
+  const [dIdA, obIdA] = gridStore.getIds(2, 2);
+  const [dIdB, obIdB] = gridStore.getIds(2, 3);
+  const [dIdC, obIdC] = gridStore.getIds(2, 6);
+
+  gridStore.updateValues([
+    { deviceId: dIdA, observationId: obIdA, value: 5 },
+    { deviceId: dIdB, observationId: obIdB, value: "test" },
+    { deviceId: dIdC, observationId: obIdC, value: 56.57 },
+  ]);
+  const valueA = gridStore.getValue(dIdA, obIdA);
+  const valueB = gridStore.getValue(dIdB, obIdB);
+  const valueC = gridStore.getValue(dIdC, obIdC);
+
+  expect(valueA).toEqual(5);
+  expect(valueB).toEqual("test");
+  expect(valueC).toEqual(56.57);
+});
