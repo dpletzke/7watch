@@ -1,10 +1,11 @@
 /** @flow */
 // import Immutable from "immutable";
 // import PropTypes from "prop-types";
-import * as React from "react";
+import React from "react";
 import { AutoSizer, MultiGrid } from "react-virtualized";
-import styles from "../../assets/css/MultiGrid.css";
+import { observer } from "mobx-react-lite";
 
+import styles from "../../assets/css/MultiGrid.css";
 import Square from "./Square";
 import { useGridStore } from "../../contexts";
 
@@ -25,17 +26,18 @@ const STYLE_TOP_RIGHT_GRID = {
   fontWeight: "bold",
 };
 
-
-export default function GridContainer() {
+const GridContainer = observer(() => {
   const gridStore = useGridStore();
 
   const _cellRenderer = ({ columnIndex, key, rowIndex, style }) => {
     return (
       <div className={styles.Cell} key={key} style={style}>
+        {/* {`${columnIndex}, ${rowIndex}`} */}
         <Square {...{ columnIndex, rowIndex }} />
       </div>
     );
   };
+
   return (
     <AutoSizer>
       {({ height, width }) => (
@@ -46,12 +48,12 @@ export default function GridContainer() {
           scrollToRow={0}
           cellRenderer={_cellRenderer}
           columnWidth={60}
-          columnCount={gridStore.observations.size() + 1}
+          columnCount={gridStore.observations.size}
           enableFixedColumnScroll
           enableFixedRowScroll
           height={height}
           rowHeight={20}
-          rowCount={gridStore.deviceIds.length + 1}
+          rowCount={gridStore.deviceIds.length}
           style={STYLE}
           styleBottomLeftGrid={STYLE_BOTTOM_LEFT_GRID}
           styleTopLeftGrid={STYLE_TOP_LEFT_GRID}
@@ -63,4 +65,6 @@ export default function GridContainer() {
       )}
     </AutoSizer>
   );
-}
+});
+
+export default GridContainer;
