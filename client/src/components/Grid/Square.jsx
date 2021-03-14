@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite";
 
 import { useGridStore } from "../../contexts";
 
-export default function Square(props) {
+const Square = observer((props) => {
   const { columnIndex, rowIndex } = props;
   const gridStore = useGridStore();
 
@@ -11,13 +11,19 @@ export default function Square(props) {
     return gridStore.getIds(columnIndex, rowIndex);
   }, [columnIndex, gridStore, rowIndex]);
 
+  let value;
+
   if (columnIndex === 0) {
-    return observer(gridStore.deviceIds[rowIndex]);
+    value = deviceId;
+  } else if (rowIndex === 0) {
+    value = gridStore.observations.get(observationId).common;
+  } else {
+    value = gridStore.getValue(deviceId, observationId);
   }
 
-  if (rowIndex === 0) {
-    return observer(gridStore.observations.entries()[rowIndex].common);
-  }
+  return (
+      <div>{value}</div>
+  );
+})
 
-  return observer(gridStore.getValue(deviceId, observationId));
-}
+export default Square;
