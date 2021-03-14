@@ -26,7 +26,7 @@ export function createGridStore() {
      */
     addDevices: function (newDeviceIds) {
       this.deviceIds.push(...newDeviceIds);
-      const observationIds = this.observations.keys();
+      const observationIds = Array.from(this.observations.keys());
       newDeviceIds.forEach((dId) => {
         observationIds.forEach((obId) => {
           this.grid.set(`${dId}-${obId}`, null);
@@ -40,13 +40,9 @@ export function createGridStore() {
      * @see observations
      */
     addObservations: function (newObservations) {
-      newObservations.forEach(
-        (acc, observation) => {
-          acc[observation.id] = observation;
-          return acc;
-        },
-        { ...this.observations }
-      );
+      newObservations.forEach((observation) => {
+        this.observations.set(observation.id, observation);
+      });
       newObservations.forEach(({ id: obId }) => {
         this.deviceIds.forEach((dId) => {
           this.grid.set(`${dId}-${obId}`, null);

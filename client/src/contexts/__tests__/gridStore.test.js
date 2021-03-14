@@ -43,9 +43,7 @@ test("addObservations correctly appends to observations and grid", () => {
   const gridKeys = Array.from(gridStore.grid.keys());
   const gridValues = Array.from(gridStore.grid.values());
 
-  expect(Object.keys(gridStore.observations).length).toEqual(
-    testObservations.length
-  );
+  expect(gridStore.observations.size).toEqual(testObservations.length);
   expect(gridStore.grid.size).toEqual(
     testDevices.length * testObservations.length
   );
