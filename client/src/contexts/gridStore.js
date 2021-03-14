@@ -1,4 +1,10 @@
-// this will be a
+/**
+ * Observations that can be returning by devices, ie heart rate
+ * @typedef {Object} Observation
+ * @property {number} Observation.id - the OBX-3 identifier
+ * @property {string} Observation.common - a short, unique name
+ * @property {string} Observation.full - the full name.
+ */
 
 export function createGridStore() {
   return {
@@ -13,10 +19,7 @@ export function createGridStore() {
     deviceIds: [],
     /**
      * track observation types known as OBX-3 in the HL7 protocol
-     * @type {Map<number, Object>} - observation Ids
-     * @property {number} [obId].id - the OBX-3 identifier
-     * @property {string} [obId].common - a short, unique name
-     * @property {string} [obId].full - the full name
+     * @type {Map<number, Observation>} - observation Ids
      */
     observations: new Map(),
     /**
@@ -30,7 +33,6 @@ export function createGridStore() {
       this.deviceIds.push(...newDeviceIds);
 
       const observationIds = Array.from(this.observations.keys());
-      console.log(observationIds, this.deviceIds);
       newDeviceIds.forEach((dId) => {
         observationIds.forEach((obId) => {
           this.grid.set(`${dId}-${obId}`, null);
@@ -40,8 +42,7 @@ export function createGridStore() {
     /**
      * Add observations to global tracker and add row elements for
      * each device with a starting value of null
-     * @param {Obervations[]} newObservations - new observations to track
-     * @see observations
+     * @param {Observation[]} newObservations - new observations to track
      */
     addObservations: function (newObservations) {
       if (!newObservations) return null;
@@ -55,9 +56,16 @@ export function createGridStore() {
         });
       });
     },
+    /**
+     * batched updates of dId-obId values
+     * @param {Object[]} updates
+     * @param {string} updates[].deviceId
+     * @param {number} updates[].observationId
+     * @param {number|string} updates[].value
+     */
     updateValues: function (updates) {
       updates.forEach(({ deviceId, observationId, value }) => {
-        if (!Object.keys(this.observations).includes(observationId)) {
+        if (!Array.from(this.observations.keys()).includes(observationId)) {
           // suggest to user to add new observation
           throw new Error("no valid entry for observation");
         }
@@ -81,7 +89,10 @@ export function createGridStore() {
     },
     getIds: function (deviceIdIndex, observationIdIndex) {
       const deviceId = this.deviceIds[deviceIdIndex];
-      const observationId = this.observations.keys()[observationIdIndex];
+
+      const observationId = Array.from(this.observations.keys())[
+        observationIdIndex
+      ];
       return [deviceId, observationId];
     },
   };
