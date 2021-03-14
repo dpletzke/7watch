@@ -13,14 +13,12 @@ import Col from "react-bootstrap/Col";
 
 import { useLogsStore } from "../contexts/logsContext";
 
-import { useObserver } from "mobx-react-lite";
-
+import { Observer } from "mobx-react-lite";
 
 function Logs() {
   const logsStore = useLogsStore();
 
   const logRow = (msg) => {
-
     const obr = msg.segments.find((sg) => sg.name === "OBR");
     const obxs = msg.segments.filter((sg) => sg.name === "OBX");
     console.log({ msg, obr, obxs });
@@ -39,8 +37,8 @@ function Logs() {
     );
   };
 
-  return useObserver(() => (
-    <>
+  return (
+    <Observer>
       <Container fluid>
         <Row>
           <Col md="12">
@@ -66,8 +64,8 @@ function Logs() {
           </Col>
         </Row>
       </Container>
-    </>
-  ));
+    </Observer>
+  );
 }
 
 export default Logs;

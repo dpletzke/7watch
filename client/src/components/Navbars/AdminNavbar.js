@@ -26,9 +26,9 @@ import Button from "react-bootstrap/Button";
 import routes from "../../routes.js";
 import Badge from "react-bootstrap/Badge";
 import { useGateStore } from "../../contexts";
-import { useObserver } from "mobx-react-lite";
+import { observer } from "mobx-react-lite";
 
-function Header() {
+const Header = observer(() => {
   const location = useLocation();
   const gate = useGateStore();
 
@@ -52,7 +52,7 @@ function Header() {
     }
     return "Brand";
   };
-  return useObserver(() => (
+  return (
     <Navbar bg="light" expand="lg">
       <Container fluid>
         <div className="d-flex justify-content-center align-items-center ml-2 ml-lg-0">
@@ -90,7 +90,7 @@ function Header() {
         </Navbar.Collapse>
       </Container>
     </Navbar>
-  ));
-}
+  );
+});
 
 export default Header;
