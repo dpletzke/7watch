@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 
 // react-bootstrap components
-import Badge from "react-bootstrap/Badge";
-import Button from "react-bootstrap/Button";
+// import Badge from "react-bootstrap/Badge";
+// import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
-import Navbar from "react-bootstrap/Navbar";
-import Nav from "react-bootstrap/Nav";
+// import Navbar from "react-bootstrap/Navbar";
+// import Nav from "react-bootstrap/Nav";
 import Table from "react-bootstrap/Table";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -13,9 +13,9 @@ import Col from "react-bootstrap/Col";
 
 import { useLogsStore } from "../contexts/logsContext";
 
-import { Observer } from "mobx-react-lite";
+import { observer } from "mobx-react-lite";
 
-function Logs() {
+const Logs = observer(() => {
   const logsStore = useLogsStore();
 
   const logRow = (msg) => {
@@ -38,34 +38,32 @@ function Logs() {
   };
 
   return (
-    <Observer>
-      <Container fluid>
-        <Row>
-          <Col md="12">
-            <Card className="card-plain table-plain-bg">
-              <Card.Header>
-                <Card.Title as="h4">All Logs</Card.Title>
-                <p className="card-category">Last 200 messages</p>
-              </Card.Header>
-              <Card.Body className="table-full-width table-responsive px-0">
-                <Table className="table-hover">
-                  <thead>
-                    <tr>
-                      <th className="border-0">Time Sent</th>
-                      <th className="border-0">Time Collected</th>
-                      <th className="border-0">Device Id</th>
-                      <th className="border-0">Variables</th>
-                    </tr>
-                  </thead>
-                  <tbody>{logsStore.logs.map((log) => logRow(log))}</tbody>
-                </Table>
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
-      </Container>
-    </Observer>
+    <Container fluid>
+      <Row>
+        <Col md="12">
+          <Card className="card-plain table-plain-bg">
+            <Card.Header>
+              <Card.Title as="h4">All Logs</Card.Title>
+              <p className="card-category">Last 200 messages</p>
+            </Card.Header>
+            <Card.Body className="table-full-width table-responsive px-0">
+              <Table className="table-hover">
+                <thead>
+                  <tr>
+                    <th className="border-0">Time Sent</th>
+                    <th className="border-0">Time Collected</th>
+                    <th className="border-0">Device Id</th>
+                    <th className="border-0">Variables</th>
+                  </tr>
+                </thead>
+                <tbody>{logsStore.logs.map((log) => logRow(log))}</tbody>
+              </Table>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+    </Container>
   );
-}
+});
 
 export default Logs;

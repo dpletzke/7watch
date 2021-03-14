@@ -4,12 +4,12 @@ import NotificationAlert from "react-notification-alert";
 // react-bootstrap components
 import {
   Alert,
-  Badge,
+  // Badge,
   Button,
   Card,
   Modal,
-  Navbar,
-  Nav,
+  // Navbar,
+  // Nav,
   Container,
   Row,
   Col,

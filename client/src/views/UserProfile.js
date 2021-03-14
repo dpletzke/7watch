@@ -2,12 +2,12 @@ import React from "react";
 
 // react-bootstrap components
 import {
-  Badge,
+  // Badge,
   Button,
   Card,
   Form,
-  Navbar,
-  Nav,
+  // Navbar,
+  // Nav,
   Container,
   Row,
   Col,
