@@ -25,8 +25,12 @@ export function createGridStore() {
      * @param {number[]} newDeviceIds - device ids of new devices to track
      */
     addDevices: function (newDeviceIds) {
+      if (!newDeviceIds) return null;
+
       this.deviceIds.push(...newDeviceIds);
+
       const observationIds = Array.from(this.observations.keys());
+      console.log(observationIds, this.deviceIds);
       newDeviceIds.forEach((dId) => {
         observationIds.forEach((obId) => {
           this.grid.set(`${dId}-${obId}`, null);
@@ -40,6 +44,8 @@ export function createGridStore() {
      * @see observations
      */
     addObservations: function (newObservations) {
+      if (!newObservations) return null;
+
       newObservations.forEach((observation) => {
         this.observations.set(observation.id, observation);
       });
@@ -49,20 +55,22 @@ export function createGridStore() {
         });
       });
     },
-    updateValue: function (deviceId, observationId, value) {
-      if (!Object.keys(this.observations).includes(observationId)) {
-        // suggest to user to add new observation
-        throw new Error("no valid entry for observation");
-      }
-      if (!this.deviceIds.includes(deviceId)) {
-        // suggest to user to add new device
-        throw new Error("no valid entry for device");
-      }
-      const key = `${deviceId}-${observationId}`;
-      if (!this.grid.has(key)) {
-        throw new Error("Error: invalid in-memory datastore");
-      }
-      this.grid.set(key, value);
+    updateValues: function (updates) {
+      updates.forEach(({ deviceId, observationId, value }) => {
+        if (!Object.keys(this.observations).includes(observationId)) {
+          // suggest to user to add new observation
+          throw new Error("no valid entry for observation");
+        }
+        if (!this.deviceIds.includes(deviceId)) {
+          // suggest to user to add new device
+          throw new Error("no valid entry for device");
+        }
+        const key = `${deviceId}-${observationId}`;
+        if (!this.grid.has(key)) {
+          throw new Error("Error: invalid in-memory datastore");
+        }
+        this.grid.set(key, value);
+      });
     },
     getValue: function (deviceId, observationId) {
       const key = `${deviceId}-${observationId}`;
