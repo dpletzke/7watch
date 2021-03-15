@@ -65,17 +65,22 @@ export function createGridStore() {
      */
     updateValues: function (updates) {
       updates.forEach(({ deviceId, observationId, value }) => {
+        console.log(
+          Array.from(this.observations.keys()),
+          observationId,
+          deviceId
+        );
         if (!Array.from(this.observations.keys()).includes(observationId)) {
           // suggest to user to add new observation
-          throw new Error("no valid entry for observation");
+          console.error("no valid entry for observation");
         }
         if (!this.deviceIds.includes(deviceId)) {
           // suggest to user to add new device
-          throw new Error("no valid entry for device");
+          console.error("no valid entry for device");
         }
         const key = `${deviceId}-${observationId}`;
         if (!this.grid.has(key)) {
-          throw new Error("Error: invalid in-memory datastore");
+          console.error("Error: invalid in-memory datastore");
         }
         this.grid.set(key, value);
       });
@@ -83,7 +88,7 @@ export function createGridStore() {
     getValue: function (deviceId, observationId) {
       const key = `${deviceId}-${observationId}`;
       if (!this.grid.has(key)) {
-        throw new Error("no valid entry for device-observation");
+        console.error("no valid entry for device-observation");
       }
       return this.grid.get(key);
     },
