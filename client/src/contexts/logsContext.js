@@ -3,8 +3,6 @@ import { createLogsStore } from "./logsStore";
 import { useLocalObservable } from "mobx-react-lite";
 import { autorun } from "mobx";
 
-import { normalizeMsg } from "../helpers/msgProcessing";
-
 const { ipcRenderer } = window.require("electron");
 
 const LogsContext = React.createContext(null);
@@ -16,7 +14,7 @@ export const LogsProvider = ({ children }) => {
     let addLogListener;
     const disposer = autorun(() => {
       addLogListener = (e, msg) => {
-        logsStore.addLog(normalizeMsg(msg));
+        logsStore.addLog(msg);
       };
       ipcRenderer.on("msg_recieved", addLogListener);
     });
