@@ -1,3 +1,5 @@
+const { normalizeMsg } = require("./helpers/msgProcessing");
+
 const { ipcMain } = require("electron");
 const { tcp } = require("simple-hl7");
 
@@ -8,14 +10,20 @@ let gateIsStarted = false;
 module.exports = (win) => {
   server.use(function (req, res, next) {
     console.log("******message received*****");
-    console.log(req.msg.log());
-    win.webContents.send("msg_recieved", req.msg);
+    // console.log(req.msg.log());
+
+    const msg = normalizeMsg(req.msg);
+
+    win.webContents.send("msg_recieved", msg);
+    console.log(JSON.stringify(msg));
+    if (msg.segments.find((seg) => seg.name === "OBX")) {
+      win.webContents.send("observation_report", msg);
+    }
     next();
   });
 
   server.use(function (err, req, res, next) {
     //error handler
-    //standard error middleware would be
     console.error(err);
     const msa = res.ack.getSegment("MSA");
     msa.setField(1, "AR");

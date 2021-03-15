@@ -1,8 +1,9 @@
 import React from "react";
 import { autorun } from "mobx";
+import { useLocalObservable } from "mobx-react-lite";
 import { createGridStore } from "./gridStore";
 import { initialDeviceIds, initialObservations } from "./initialGrid";
-import { useLocalObservable } from "mobx-react-lite";
+import { msgToUpdates } from "../helpers/msgProcessing";
 
 const { ipcRenderer } = window.require("electron");
 
@@ -18,24 +19,34 @@ export const GridProvider = ({ children }) => {
 
     /**
      * Set up fixtures for testing
-     * TODO iniate this based off of Local Storage or main process storage nedb?
+     * TODO initialize this based off of previous state
      */
     gridStore.addDevices(initialDeviceIds);
     gridStore.addObservations(initialObservations);
+
+    /**
+     * Set up value fixtures for testing
+     * TODO initialize this based off of previous state
+     */
+    const updates = Array.from(gridStore.grid.keys()).map((id) => {
+      const [deviceId, observationId] = id.split("-");
+      return {
+        deviceId,
+        observationId: Number(observationId),
+        value: Math.trunc(Math.random() * 1000),
+      };
+    });
+    gridStore.updateValues(updates);
 
     /**
      * Set up listener for observations coming from the main process,
      */
     let newObservationListener;
     const disposer = autorun(() => {
-      newObservationListener = (e, updates) => {
-        try {
-          gridStore.updateValues(updates);
-        } catch (err) {
-          console.error(err);
-        }
+      newObservationListener = (e, msg) => {
+        gridStore.updateValues(msgToUpdates(msg));
       };
-      ipcRenderer.on("observation", newObservationListener);
+      ipcRenderer.on("observation_report", newObservationListener);
     });
 
     return () => {
