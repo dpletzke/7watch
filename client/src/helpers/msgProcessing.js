@@ -1,52 +1,26 @@
-const normalizeFields = (fields) => {
-  return fields.map((f) => {
-      return f.value
-        .map((vals) => {
-          return vals.map((val) => val.value.join("^"));
-        })
-        .join("&");
-  })
-};
+/**
+ * update of a device-observation instance values
+ * @typedef {Object} Update
+ * @property {string} Update.deviceId
+ * @property {number} Update.observationId
+ * @property {number|string} Update.value
+ */
 
-const normalizeLine = (line) => {
-  const { name, fields } = line;
-
-  const normFields = normalizeFields(fields);
-
-  const translatedFields = {
-    MSH: {
-      sendingApplication: normFields[0],
-      sentTimeStamp: normFields[4],
-    },
-    OBR: {
-      observationTimeStamp: normFields[6],
-      collectorIdentifier: normFields[9],
-      relevantClinicalInformation: normFields[12],
-    },
-    OBX: {
-      valueType: normFields[1],
-      observationIdentifier: normFields[2],
-      value: normFields[4],
-      unitId: normFields[5],
-      observationTimeStamp: normFields[13],
-    },
-  }[name];
-
-  return {
-    name,
-    fields: translatedFields,
-  };
-};
-
-const normalizeMsg = (msg) => {
-  const { header, segments } = msg;
-
-  return {
-    header: normalizeLine(header),
-    segments: segments.map((sgmnt) => normalizeLine(sgmnt)),
-  };
-};
-
-// get stamp sent, stamp conducted, sending device, relevant clinical information
-
-export { normalizeMsg };
+/**
+ * pare custom message into updateable objects
+ * @param {Message} msg - Custom message object
+ * @returns {Update[]} updates - array of upates to make on the grid
+ */
+export function msgToUpdates(msg) {
+  console.log(msg);
+  const { fields } = msg.segments.filter((seg) => seg.name === "OBR");
+  const { collectorIdentifier } = fields;
+  const obxs = msg.segments.filter((seg) => seg.name === "OBX");
+  return obxs.map((obx) => {
+    return {
+      deviceId: collectorIdentifier,
+      observationId: obx.observationIdentifier,
+      value: obx.value,
+    };
+  });
+}
