@@ -14,17 +14,20 @@ const Square = observer((props) => {
   }, [columnIndex, gridStore, rowIndex]);
 
   let value;
+  let title = "";
   if (columnIndex === 0 && rowIndex === 0) {
     value = "Table";
   } else if (columnIndex === 0 && deviceId) {
     value = deviceId;
   } else if (rowIndex === 0 && gridStore.observations.get(observationId)) {
-    value = gridStore.observations.get(observationId).common;
+    const observation = gridStore.observations.get(observationId);
+    title = `${observationId} - ${observation.full}`;
+    value = observation.common;
   } else if (deviceId && gridStore.observations.get(observationId)) {
     value = gridStore.getValue(deviceId, observationId);
   }
 
-  return <div>{value}</div>;
+  return <div title={title}>{value}</div>;
 });
 
 export default Square;
