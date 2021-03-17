@@ -13,12 +13,12 @@
  */
 export function msgToUpdates(msg) {
   console.log(msg);
-  const { fields } = msg.segments.filter((seg) => seg.name === "OBR");
-  const { collectorIdentifier } = fields;
+  const obr = msg.segments.find((seg) => seg.name === "OBR");
+  const { collectorIdentifier } = obr;
   const obxs = msg.segments.filter((seg) => seg.name === "OBX");
   return obxs.map((obx) => {
     return {
-      deviceId: collectorIdentifier,
+      deviceId: obr.collectorIdentifier,
       observationId: obx.observationIdentifier,
       value: obx.value,
     };
