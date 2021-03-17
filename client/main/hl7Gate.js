@@ -5,9 +5,9 @@ const { tcp } = require("simple-hl7");
 
 const server = tcp();
 
-let gateIsStarted = false;
-
 module.exports = (win) => {
+  let gateIsStarted = false;
+
   server.use(function (req, res, next) {
     console.log("******message received*****");
     // console.log(req.msg.log());
