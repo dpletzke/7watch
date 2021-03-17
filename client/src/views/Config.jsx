@@ -24,7 +24,6 @@ function Config() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     specifyConfig({ formConfig });
-    console.log({ gate });
     await gate.close();
     gate.open();
   };

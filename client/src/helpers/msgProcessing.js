@@ -12,7 +12,6 @@
  * @returns {Update[]} updates - array of upates to make on the grid
  */
 export function msgToUpdates(msg) {
-  // console.log(msg);
   const obr = msg.segments.find((seg) => seg.name === "OBR");
   const obxs = msg.segments.filter((seg) => seg.name === "OBX");
 
