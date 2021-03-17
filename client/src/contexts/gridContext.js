@@ -1,5 +1,4 @@
 import React from "react";
-import { autorun } from "mobx";
 import { useLocalObservable } from "mobx-react-lite";
 import { createGridStore } from "./gridStore";
 import { initialDeviceIds, initialObservations } from "./initialGrid";
@@ -28,13 +27,16 @@ export const GridProvider = ({ children }) => {
      * Set up value fixtures for testing
      * TODO initialize this based off of previous state
      */
-    const updates = Array.from(gridStore.grid.keys()).map((id) => {
-      const [deviceId, observationId] = id.split("-");
-      return {
-        deviceId,
-        observationId: Number(observationId),
-        value: Math.trunc(Math.random() * 1000),
-      };
+
+    const updates = [];
+    initialDeviceIds.forEach((deviceId) => {
+      initialObservations.forEach(({ id }) => {
+        updates.push({
+          deviceId,
+          observationId: Number(id),
+          value: Math.trunc(Math.random() * 1000),
+        });
+      });
     });
     gridStore.updateValues(updates);
 
@@ -42,17 +44,14 @@ export const GridProvider = ({ children }) => {
      * Set up listener for observations coming from the main process,
      */
     let newObservationListener;
-    const disposer = autorun(() => {
-      newObservationListener = (e, msg) => {
-        const parsedMsg = msgToUpdates(msg);
-        gridStore.updateValues(parsedMsg);
-      };
-      ipcRenderer.on("observation_report", newObservationListener);
-    });
+    newObservationListener = (e, msg) => {
+      const parsedMsg = msgToUpdates(msg);
+      gridStore.updateValues(parsedMsg);
+    };
+    ipcRenderer.on("observation_report", newObservationListener);
 
     return () => {
       ipcRenderer.removeListener("observation", newObservationListener);
-      disposer();
     };
   }, []);
 
