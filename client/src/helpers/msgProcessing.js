@@ -12,15 +12,17 @@
  * @returns {Update[]} updates - array of upates to make on the grid
  */
 export function msgToUpdates(msg) {
-  console.log(msg);
+  // console.log(msg);
   const obr = msg.segments.find((seg) => seg.name === "OBR");
-  const { collectorIdentifier } = obr;
   const obxs = msg.segments.filter((seg) => seg.name === "OBX");
+
+  // TODO test for no OBX's, ie no updates
+  console.log({ obr, obxs });
   return obxs.map((obx) => {
     return {
-      deviceId: obr.collectorIdentifier,
-      observationId: obx.observationIdentifier,
-      value: obx.value,
+      deviceId: obr.fields.collectorIdentifier,
+      observationId: obx.fields.observationIdentifier,
+      value: obx.fields.value,
     };
   });
 }
