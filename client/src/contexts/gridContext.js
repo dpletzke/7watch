@@ -44,7 +44,8 @@ export const GridProvider = ({ children }) => {
     let newObservationListener;
     const disposer = autorun(() => {
       newObservationListener = (e, msg) => {
-        gridStore.updateValues(msgToUpdates(msg));
+        const parsedMsg = msgToUpdates(msg);
+        gridStore.updateValues(parsedMsg);
       };
       ipcRenderer.on("observation_report", newObservationListener);
     });
