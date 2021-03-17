@@ -33,7 +33,7 @@ export const GridProvider = ({ children }) => {
       initialObservations.forEach(({ id }) => {
         updates.push({
           deviceId,
-          observationId: Number(id),
+          observationId: id,
           value: Math.trunc(Math.random() * 1000),
         });
       });

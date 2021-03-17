@@ -20,8 +20,8 @@ export function msgToUpdates(msg) {
   return obxs.map((obx) => {
     return {
       deviceId: obr.fields.collectorIdentifier,
-      observationId: obx.fields.observationIdentifier,
-      value: obx.fields.value,
+      observationId: Number(obx.fields.observationIdentifier),
+      value: Number(obx.fields.value),
     };
   });
 }
