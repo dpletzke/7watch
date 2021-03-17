@@ -1,7 +1,6 @@
 import React from "react";
 import { createLogsStore } from "./logsStore";
 import { useLocalObservable } from "mobx-react-lite";
-import { autorun } from "mobx";
 
 const { ipcRenderer } = window.require("electron");
 
@@ -12,16 +11,14 @@ export const LogsProvider = ({ children }) => {
 
   React.useEffect(() => {
     let addLogListener;
-    const disposer = autorun(() => {
-      addLogListener = (e, msg) => {
-        logsStore.addLog(msg);
-      };
-      ipcRenderer.on("msg_recieved", addLogListener);
-    });
+
+    addLogListener = (e, msg) => {
+      logsStore.addLog(msg);
+    };
+    ipcRenderer.on("msg_recieved", addLogListener);
 
     return () => {
       ipcRenderer.removeListener("msg_received", addLogListener);
-      disposer();
     };
   }, []);
 
