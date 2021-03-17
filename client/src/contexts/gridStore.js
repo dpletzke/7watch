@@ -73,14 +73,17 @@ export function createGridStore() {
         if (!Array.from(this.observations.keys()).includes(observationId)) {
           // suggest to user to add new observation
           console.error("no valid entry for observation");
+          return;
         }
         if (!this.deviceIds.includes(deviceId)) {
           // suggest to user to add new device
           console.error("no valid entry for device");
+          return;
         }
         const key = `${deviceId}-${observationId}`;
         if (!this.grid.has(key)) {
           console.error("Error: invalid in-memory datastore");
+          return;
         }
         this.grid.set(key, value);
       });
