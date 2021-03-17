@@ -25,6 +25,9 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: true,
     },
+    /** see for below https://www.electronjs.org/docs/faq#the-font-looks-blurry-what-is-this-and-what-can-i-do
+     */
+    backgroundColor: "#fff",
   });
   require("./hl7Gate")(win);
 
