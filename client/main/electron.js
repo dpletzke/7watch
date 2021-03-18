@@ -1,10 +1,10 @@
-const { app: electron, BrowserWindow, shell } = require("electron");
+const { app, BrowserWindow, shell } = require("electron");
 const isDev = require("electron-is-dev");
 const path = require("path");
 
 // runs gate event listeners
 
-process.env.ELECTRON_FORCE_WINDOW_MENU_BAR = true;
+// process.env.ELECTRON_FORCE_WINDOW_MENU_BAR = true;
 // process.env.ELECTRON_OVERRIDE_DIST_PATH =
 
 // Conditionally include the dev tools installer to load React Dev Tools
@@ -25,11 +25,15 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: true,
     },
+    // frame: false,
     /** see for below https://www.electronjs.org/docs/faq#the-font-looks-blurry-what-is-this-and-what-can-i-do
      */
     backgroundColor: "#fff",
   });
-  require("./hl7Gate")(win);
+
+  // initialize hl7gate and db
+  require(path.join(__dirname, "./hl7Gate"))(win);
+  const { sendInitialState } = require(path.join(__dirname, "./db/db"))(win);
 
   // Load from localhost if in development
   // Otherwise load index.html file
@@ -54,7 +58,7 @@ function createWindow() {
 // Create a new browser window by invoking the createWindow
 // function once the Electron application is initialized.
 // Install REACT_DEVELOPER_TOOLS as well if isDev
-electron.whenReady().then(() => {
+app.whenReady().then(() => {
   if (isDev) {
     installExtension(REACT_DEVELOPER_TOOLS)
       .then((name) => console.log(`Added Extension:  ${name}`))
@@ -67,9 +71,9 @@ electron.whenReady().then(() => {
 // Add a new listener that tries to quit the application when
 // it no longer has any open windows. This listener is a no-op
 // on macOS due to the operating system's window management behavior.
-electron.on("window-all-closed", () => {
+app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
-    electron.quit();
+    app.quit();
   }
 });
 
@@ -77,7 +81,7 @@ electron.on("window-all-closed", () => {
 // when the application has no visible windows after being activated.
 // For example, after launching the application for the first time,
 // or re-launching the already running application.
-electron.on("activate", () => {
+app.on("activate", () => {
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();
   }
