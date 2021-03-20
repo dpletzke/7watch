@@ -1,4 +1,4 @@
-const { app, BrowserWindow, shell, ipcMain } = require("electron");
+const { app, BrowserWindow, shell } = require("electron");
 const isDev = require("electron-is-dev");
 const path = require("path");
 
@@ -25,15 +25,10 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: true,
     },
-    // frame: false,
     /** see for below https://www.electronjs.org/docs/faq#the-font-looks-blurry-what-is-this-and-what-can-i-do
      */
     backgroundColor: "#fff",
   });
-
-  // initialize hl7gate and db
-  require(path.join(__dirname, "./hl7Gate"))(win);
-  require(path.join(__dirname, "./db/db"))(win);
 
   // Load from localhost if in development
   // Otherwise load index.html file
@@ -42,6 +37,10 @@ function createWindow() {
       ? "http://localhost:3000"
       : `file://${path.join(__dirname, "../build/index.html")}`
   );
+
+  // initialize hl7gate and db
+  const gateControls = require(path.join(__dirname, "./hl7Gate"))(win);
+  require(path.join(__dirname, "./ipcRoutes"))(win, gateControls);
 
   // any new windows that are opened (ie with a web link) open in default browser
   win.webContents.on("new-window", (e, url) => {
@@ -89,7 +88,3 @@ app.on("activate", () => {
 
 // The code above has been adapted from a starter example in the Electron docs:
 // https://www.electronjs.org/docs/tutorial/quick-start#create-the-main-script-file
-
-module.exports = {
-  win,
-};

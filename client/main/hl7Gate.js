@@ -1,21 +1,18 @@
 const { normalizeMsg } = require("./helpers/msgProcessing");
 
-const { ipcMain } = require("electron");
 const { tcp } = require("simple-hl7");
 
 const server = tcp();
+let gateIsStarted = false;
 
 module.exports = (win) => {
-  let gateIsStarted = false;
-
   server.use(function (req, res, next) {
-    console.log("******message received*****");
     // console.log(req.msg.log());
 
     const msg = normalizeMsg(req.msg);
 
     win.webContents.send("msg_recieved", msg);
-    console.log(JSON.stringify(msg));
+
     if (msg.segments.find((seg) => seg.name === "OBX")) {
       win.webContents.send("observation_report", msg);
     }
@@ -31,7 +28,7 @@ module.exports = (win) => {
     res.end();
   });
 
-  ipcMain.handle("start_gate", (event, config) => {
+  const startGate = (config) => {
     return new Promise((res, rej) => {
       if (!gateIsStarted) {
         console.log(
@@ -44,9 +41,9 @@ module.exports = (win) => {
         rej("Attempted to start the gate when it was already started");
       }
     });
-  });
+  };
 
-  ipcMain.handle("stop_gate", (data) => {
+  const stopGate = () => {
     return new Promise((res, rej) => {
       if (gateIsStarted) {
         server.stop();
@@ -57,5 +54,10 @@ module.exports = (win) => {
         rej("Attempted to stop the gate when it wasn't started");
       }
     });
-  });
+  };
+
+  return {
+    startGate,
+    stopGate,
+  };
 };
