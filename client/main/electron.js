@@ -1,4 +1,4 @@
-const { app, BrowserWindow, shell } = require("electron");
+const { app, BrowserWindow, shell, ipcMain } = require("electron");
 const isDev = require("electron-is-dev");
 const path = require("path");
 
@@ -33,7 +33,7 @@ function createWindow() {
 
   // initialize hl7gate and db
   require(path.join(__dirname, "./hl7Gate"))(win);
-  const { sendInitialState } = require(path.join(__dirname, "./db/db"))(win);
+  require(path.join(__dirname, "./db/db"))(win);
 
   // Load from localhost if in development
   // Otherwise load index.html file
