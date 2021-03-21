@@ -15,12 +15,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import Dashboard from "./views/Dashboard";
-import UserProfile from "./views/UserProfile";
-import TableList from "./views/TableList";
-import Typography from "./views/Typography";
 import Icons from "./views/Icons";
-import Notifications from "./views/Notifications";
 import Config from "./views/Config";
 import Logs from "./views/Logs";
 import GridView from "./views/GridView";
@@ -35,38 +30,10 @@ const dashboardRoutes = [
     layout: "/admin",
   },
   {
-    path: "/dashboard",
-    name: "Dashboard",
-    icon: "nc-icon nc-chart-pie-35",
-    component: Dashboard,
-    layout: "/admin",
-  },
-  {
     path: "/grid",
     name: "Grid",
     icon: "nc-icon nc-grid-45",
     component: GridView,
-    layout: "/admin",
-  },
-  {
-    path: "/user",
-    name: "User Profile",
-    icon: "nc-icon nc-circle-09",
-    component: UserProfile,
-    layout: "/admin",
-  },
-  {
-    path: "/table",
-    name: "Table List",
-    icon: "nc-icon nc-notes",
-    component: TableList,
-    layout: "/admin",
-  },
-  {
-    path: "/typography",
-    name: "Typography",
-    icon: "nc-icon nc-paper-2",
-    component: Typography,
     layout: "/admin",
   },
   {
@@ -77,10 +44,10 @@ const dashboardRoutes = [
     layout: "/admin",
   },
   {
-    path: "/notifications",
-    name: "Notifications",
-    icon: "nc-icon nc-bell-55",
-    component: Notifications,
+    path: "/logs",
+    name: "Hl7 Logs",
+    icon: "nc-icon nc-single-copy-04",
+    component: Logs,
     layout: "/admin",
   },
   {
@@ -88,13 +55,6 @@ const dashboardRoutes = [
     name: "Configuration",
     icon: "nc-icon nc-settings-gear-64",
     component: Config,
-    layout: "/admin",
-  },
-  {
-    path: "/logs",
-    name: "Hl7 Logs",
-    icon: "nc-icon nc-single-copy-04",
-    component: Logs,
     layout: "/admin",
   },
 ];
