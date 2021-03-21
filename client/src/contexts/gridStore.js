@@ -57,6 +57,39 @@ export function createGridStore() {
       });
     },
     /**
+     *
+     * @param {number[]} deviceIdsToRemove - array of device ids to remove
+     */
+    removeDevices: function (deviceIdsToRemove) {
+      console.log("here");
+      this.deviceIds = this.deviceIds.filter((dId) => {
+        return !deviceIdsToRemove.includes(dId);
+      });
+
+      const observationIds = Array.from(this.observations.keys());
+      deviceIdsToRemove.forEach((dId) => {
+        observationIds.forEach((obId) => {
+          this.grid.delete(`${dId}-${obId}`);
+        });
+      });
+    },
+    /**
+     *
+     * @param {number[]} observationsToRemove - array of observations to remove
+     */
+    removeObservations: function (observationsToRemove) {
+      if (!observationsToRemove) return null;
+      console.log(observationsToRemove);
+      observationsToRemove.forEach((observation) => {
+        this.observations.delete(observation.id);
+      });
+      observationsToRemove.forEach(({ id: obId }) => {
+        this.deviceIds.forEach((dId) => {
+          this.grid.delete(`${dId}-${obId}`);
+        });
+      });
+    },
+    /**
      * batched updates of dId-obId values
      * @param {Object[]} updates
      * @param {string} updates[].deviceId
