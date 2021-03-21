@@ -22,12 +22,12 @@ module.exports = (window, gateControls) => {
     if (win) {
       e.preventDefault();
       // TODO implement in renderer send save_app_state
+      win.webContents.send("closing_app");
       closeAssuranceTimer = setTimeout(() => {
         win = null;
         app.quit();
         clearTimeout(closeAssuranceTimer);
       }, 3000);
-      win.webContents.send("closing_app");
     }
   });
 
