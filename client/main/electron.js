@@ -25,6 +25,8 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: true,
     },
+    // makes startup smoother to show win later
+    show: false,
     /** see for below https://www.electronjs.org/docs/faq#the-font-looks-blurry-what-is-this-and-what-can-i-do
      */
     backgroundColor: "#fff",
@@ -38,7 +40,11 @@ function createWindow() {
       : `file://${path.join(__dirname, "../build/index.html")}`
   );
 
-  // initialize hl7gate and db
+  win.once("ready-to-show", () => {
+    win.show();
+  });
+
+  // initialize hl7gate and all business logic routes
   const gateControls = require(path.join(__dirname, "./hl7Gate"))(win);
   require(path.join(__dirname, "./ipcRoutes"))(win, gateControls);
 
