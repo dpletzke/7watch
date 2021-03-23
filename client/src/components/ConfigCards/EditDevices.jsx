@@ -31,15 +31,17 @@ const EditDevices = observer(() => {
     setNewDevice(e.target.value);
   };
 
-  const input = (deviceId) => {
+  const deviceRow = (deviceId) => {
     return (
-      <Form key={deviceId} onSubmit={handleRemove(deviceId)} as={Row}>
-        <Form.Group controlId={deviceId}>
-          <Form.Control plaintext readOnly name={deviceId} value={deviceId} />
-        </Form.Group>
-        <Button type="submit" variant="link">
-          Remove
-        </Button>
+      <Form key={deviceId} onSubmit={handleRemove(deviceId)}>
+        <Row>
+          <Form.Group controlId={deviceId}>
+            <Form.Control plaintext readOnly name={deviceId} value={deviceId} />
+          </Form.Group>
+          <Button className="btn pull-right" type="submit" variant="danger">
+            Remove
+          </Button>
+        </Row>
       </Form>
     );
   };
@@ -51,14 +53,16 @@ const EditDevices = observer(() => {
       </Card.Header>
       <Card.Body>
         <Container>
-          {gridStore.deviceIds.map((dId) => input(dId))}
+          {gridStore.deviceIds.map((dId) => deviceRow(dId))}
           <Form onSubmit={handleAdd}>
-            <Form.Group>
-              <Form.Control
-                name={newDevice}
-                value={newDevice}
-                onChange={handleChange}
-              />
+            <Row>
+              <Form.Group>
+                <Form.Control
+                  name={newDevice}
+                  value={newDevice}
+                  onChange={handleChange}
+                />
+              </Form.Group>
               <Button
                 className="btn-fill pull-right"
                 type="submit"
@@ -66,7 +70,7 @@ const EditDevices = observer(() => {
               >
                 Add Device
               </Button>
-            </Form.Group>
+            </Row>
           </Form>
         </Container>
         <div className="clearfix"></div>

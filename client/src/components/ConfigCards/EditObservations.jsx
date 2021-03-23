@@ -5,6 +5,7 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 
 import { useGridStore } from "../../contexts";
 import Container from "react-bootstrap/esm/Container";
@@ -31,6 +32,7 @@ const EditObservations = observer(() => {
   const handleRemove = (observationId) => {
     return (e) => {
       e.preventDefault();
+      console.log(e);
       gridStore.removeObservations([observationId]);
     };
   };
@@ -47,19 +49,29 @@ const EditObservations = observer(() => {
     console.log(id, full, common);
     // handleRemove(id)
     return (
-      <Form key={id} onSubmit={() => console.log('delete')} as={Row}>
-        <Form.Group>
-          <Form.Control plaintext readOnly name="id" value={id} />
-        </Form.Group>
-        <Form.Group>
-          <Form.Control plaintext readOnly name="common" value={common} />
-        </Form.Group>
-        <Form.Group>
-          <Form.Control plaintext readOnly name="full" value={full} />
-        </Form.Group>
-        <Button type="submit" variant="link">
-          Remove
-        </Button>
+      <Form key={id} onSubmit={handleRemove(id)}>
+        <Row>
+          <Col md="1">
+            <Form.Group>
+              <Form.Control plaintext readOnly name="id" value={id} />
+            </Form.Group>
+          </Col>
+          <Col md='2'>
+            <Form.Group>
+              <Form.Control plaintext readOnly name="common" value={common} />
+            </Form.Group>
+          </Col>
+          <Col>
+            <Form.Group>
+              <Form.Control plaintext readOnly name="full" value={full} />
+            </Form.Group>
+          </Col>
+          <Col>
+            <Button className="btn pull-right" type="submit" variant="danger">
+              Remove
+            </Button>
+          </Col>
+        </Row>
       </Form>
     );
   };
