@@ -20,7 +20,6 @@ const EditObservations = observer(() => {
 
   const handleAdd = (e) => {
     e.preventDefault();
-    console.log(newObservation);
     gridStore.addObservations([newObservation]);
     setnewObservation({
       id: "",
@@ -32,7 +31,6 @@ const EditObservations = observer(() => {
   const handleRemove = (observationId) => {
     return (e) => {
       e.preventDefault();
-      console.log(e);
       gridStore.removeObservations([observationId]);
     };
   };
@@ -46,8 +44,6 @@ const EditObservations = observer(() => {
 
   const input = (observation) => {
     const { id, full, common } = observation;
-    console.log(id, full, common);
-    // handleRemove(id)
     return (
       <Form key={id} onSubmit={handleRemove(id)}>
         <Row>
@@ -56,7 +52,7 @@ const EditObservations = observer(() => {
               <Form.Control plaintext readOnly name="id" value={id} />
             </Form.Group>
           </Col>
-          <Col md='2'>
+          <Col md="2">
             <Form.Group>
               <Form.Control plaintext readOnly name="common" value={common} />
             </Form.Group>

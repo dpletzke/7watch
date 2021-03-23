@@ -5,11 +5,11 @@ import { GridProvider, useGridStore } from "./gridContext";
 import { configure } from "mobx";
 
 configure({
-  enforceActions: "always",
-  computedRequiresReaction: true,
-  reactionRequiresObservable: true,
-  observableRequiresReaction: true,
-  disableErrorBoundaries: true,
+  // enforceActions: "always",
+  // computedRequiresReaction: true,
+  // reactionRequiresObservable: true,
+  // observableRequiresReaction: true,
+  // disableErrorBoundaries: true,
 });
 
 export default function IndexProvider({ children }) {
