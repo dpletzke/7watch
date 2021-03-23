@@ -98,11 +98,6 @@ export function createGridStore() {
      */
     updateValues: function (updates) {
       updates.forEach(({ deviceId, observationId, value }) => {
-        // console.log(
-        //   Array.from(this.observations.keys()),
-        //   observationId,
-        //   deviceId
-        // );
         if (!Array.from(this.observations.keys()).includes(observationId)) {
           // suggest to user to add new observation
           console.error("no valid entry for observation");

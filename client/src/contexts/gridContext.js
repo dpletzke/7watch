@@ -1,5 +1,6 @@
 import React from "react";
 import { useLocalObservable } from "mobx-react-lite";
+import { toJS } from "mobx";
 import { createGridStore } from "./gridStore";
 import { initialDeviceIds, initialObservations } from "./initialGrid";
 import { msgToUpdates } from "../helpers/msgProcessing";
@@ -50,8 +51,25 @@ export const GridProvider = ({ children }) => {
     };
     ipcRenderer.on("observation_report", newObservationListener);
 
+    /**
+     * Setup Listener for saving state before close
+     */
+    let appClosingListener;
+    appClosingListener = (e) => {
+      const appState = {
+        devices: toJS(gridStore.deviceIds),
+        observations: toJS(gridStore.observations),
+        grid: toJS(gridStore.grid),
+        config: {},
+      };
+      console.log(appState);
+      ipcRenderer.send("save_before_closing");
+    };
+    ipcRenderer.on("closing_app", appClosingListener);
+
     return () => {
       ipcRenderer.removeListener("observation", newObservationListener);
+      ipcRenderer.removeListener("closing_app", appClosingListener);
     };
   }, []);
 

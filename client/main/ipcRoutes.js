@@ -21,24 +21,34 @@ module.exports = (window, gateControls) => {
   win.on("close", (e) => {
     if (win) {
       e.preventDefault();
+      console.log("win on close");
       // TODO implement in renderer send save_app_state
       win.webContents.send("closing_app");
       closeAssuranceTimer = setTimeout(() => {
         win = null;
-        app.quit();
+        console.log("timeout close");
+        // TODO uncomment before ship
+        // app.quit();
         clearTimeout(closeAssuranceTimer);
       }, 3000);
     }
   });
 
-  ipcMain.handle("save_before_closing", async (event, appState) => {
+  ipcMain.on("save_before_closing", () => {
     clearTimeout(closeAssuranceTimer);
-    await replaceDatabase(appState);
-    win = null;
-    // TODO do we need this if there is already a events listener for all windows closed?
-    // if (process.platform !== "darwin") {
-    //   app.quit();
-    // }
+    console.log("here");
+    replaceDatabase(appState)
+      .then(() => {
+        win = null;
+        console.log("recieve save-before-closing");
+        // TODO do we need this if there is already a events listener for all windows closed?
+        // if (process.platform !== "darwin") {
+        //   app.quit();
+        // }
+      })
+      .catch((err) => {
+        console.errror(err);
+      });
   });
 
   ipcMain.handle("start_gate", (event, config) => {
