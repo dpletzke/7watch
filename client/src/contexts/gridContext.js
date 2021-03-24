@@ -1,6 +1,6 @@
 import React from "react";
 import { useLocalObservable } from "mobx-react-lite";
-import { toJS } from "mobx";
+import { toJS, action } from "mobx";
 import { createGridStore } from "./gridStore";
 import { initialDeviceIds, initialObservations } from "./initialGrid";
 import { msgToUpdates } from "../helpers/msgProcessing";
@@ -18,58 +18,46 @@ export const GridProvider = ({ children }) => {
     // TODO gui tracker for when new devices or observations come through the track
 
     /**
-     * Set up fixtures for testing
-     * TODO initialize this based off of previous state
-     */
-    gridStore.addDevices(initialDeviceIds);
-    gridStore.addObservations(initialObservations);
-
-    /**
-     * Set up value fixtures for testing
-     * TODO initialize this based off of previous state
-     */
-
-    const updates = [];
-    initialDeviceIds.forEach((deviceId) => {
-      initialObservations.forEach(({ id }) => {
-        updates.push({
-          deviceId,
-          observationId: id,
-          value: Math.trunc(Math.random() * 1000),
-        });
-      });
-    });
-    gridStore.updateValues(updates);
-
-    /**
      * Set up listener for observations coming from the main process,
+     * set in Logs page
      */
-    let newObservationListener;
-    newObservationListener = (e, msg) => {
+    const newObservationListener = action((e, msg) => {
       const parsedMsg = msgToUpdates(msg);
       gridStore.updateValues(parsedMsg);
-    };
+    });
     ipcRenderer.on("observation_report", newObservationListener);
+
+    /**
+     * Setup Listener for initializing state after open
+     */
+    const appOpeningListener = action((e, previousState) => {
+      const { devices, observations, grid, config } = previousState;
+      console.log("setting preivous state", previousState);
+      gridStore.initializeState({ deviceIds: devices, observations, grid });
+    });
+    ipcRenderer.on("set_previous_state_after_open", appOpeningListener);
 
     /**
      * Setup Listener for saving state before close
      */
-    let appClosingListener;
-    appClosingListener = (e) => {
+    const appClosingListener = (e) => {
       const appState = {
         devices: toJS(gridStore.deviceIds),
         observations: toJS(gridStore.observations),
         grid: toJS(gridStore.grid),
         config: {},
       };
-      console.log(appState);
-      ipcRenderer.send("save_before_closing");
+      ipcRenderer.send("save_before_closing", appState);
     };
     ipcRenderer.on("closing_app", appClosingListener);
 
     return () => {
       ipcRenderer.removeListener("observation", newObservationListener);
       ipcRenderer.removeListener("closing_app", appClosingListener);
+      ipcRenderer.removeListener(
+        "set_previous_state_after_open",
+        appOpeningListener
+      );
     };
   }, []);
 

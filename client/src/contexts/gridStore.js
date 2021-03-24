@@ -27,6 +27,12 @@ export function createGridStore() {
      * each device/observation type with a starting value of null
      * @param {number[]} newDeviceIds - device ids of new devices to track
      */
+    initializeState: function (appState) {
+      const { deviceIds, observations, grid } = appState;
+      this.deviceIds = deviceIds;
+      this.observations = observations;
+      this.grid = grid;
+    },
     addDevices: function (newDeviceIds) {
       if (!newDeviceIds) return null;
 
@@ -61,7 +67,6 @@ export function createGridStore() {
      * @param {number[]} deviceIdsToRemove - array of device ids to remove
      */
     removeDevices: function (deviceIdsToRemove) {
-      console.log("here");
       this.deviceIds = this.deviceIds.filter((dId) => {
         return !deviceIdsToRemove.includes(dId);
       });
