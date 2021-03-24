@@ -19,20 +19,80 @@ const db = {
   config: dbFactory("config.db"),
 };
 
-const replaceAllData = (db, data) => {
-  return db.remove({}, { multi: true }).then(() => {
-    return db.insert(data);
+/**
+ * packing functions, functions that transform state data
+ * into somthing saveable in the db, ie arrays of objects
+ */
+const pack = {
+  devices: (deviceIds) => {
+    return deviceIds.map((dId) => {
+      return { deviceId: dId };
+    });
+  },
+  observations: (observations) => {
+    return Array.from(observations.values());
+  },
+  grid: (grid) => {
+    return Array.from(grid.entries()).map(([compositeKey, value]) => {
+      return { compositeKey, value };
+    });
+  },
+  // TODO implement config packing
+  // config:
+};
+
+/**
+ * unpacking functions, functions that transform database data
+ * into somthing settable in mobx, ie Maps
+ */
+const unpack = {
+  devices: (deviceIds) => {
+    return deviceIds.map(({ deviceId }) => {
+      return deviceId;
+    });
+  },
+  observations: (observations) => {
+    return observations.reduce((acc, observation) => {
+      const { id, common, full } = observation;
+      acc.set(id, { id, common, full });
+      return acc;
+    }, new Map());
+  },
+  grid: (grid) => {
+    return grid.reduce((acc, gridValue) => {
+      acc.set(gridValue.compositeKey, gridValue.value);
+      return acc;
+    }, new Map());
+  },
+  // TODO implement config unpacking
+  // config:
+};
+
+const replaceData = (db, data) => {
+  console.log({ data });
+  return db.remove({}, { multi: true }).then((result) => {
+    console.log({ removeResult: result });
+    return db.insert(data).then((result) => {
+      console.log({ insertResult: result });
+    });
   });
 };
 
 const replaceDatabase = (appState) => {
   const { devices, observations, grid, config } = appState;
 
+  const packed = {
+    devices: pack.devices(devices),
+    observations: pack.observations(observations),
+    grid: pack.grid(grid),
+    // devices: packDevices(devices),
+  };
+
   return Promise.all([
-    replaceAllData(db.devices, devices),
-    replaceAllData(db.observations, observations),
-    replaceAllData(db.gridValues, grid),
-    replaceAllData(db.config, config),
+    replaceData(db.devices, packed.devices),
+    replaceData(db.observations, packed.observations),
+    replaceData(db.gridValues, packed.grid),
+    // replaceData(db.config, packed.config),
   ]);
 };
 
@@ -42,7 +102,14 @@ const retrievePreviousState = () => {
     db.observations.find({}),
     db.gridValues.find({}),
     db.config.find({}),
-  ]);
+  ]).then(([devices, observations, gridValues, config]) => {
+    return {
+      devices: unpack.devices(devices),
+      observations: unpack.observations(observations),
+      grid: unpack.grid(gridValues),
+      // config: unpack.config(config)
+    };
+  });
 };
 
 module.exports = { replaceDatabase, retrievePreviousState };
