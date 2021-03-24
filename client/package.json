@@ -64,6 +64,9 @@
     "electronmon": "^1.1.2",
     "wait-on": "^5.2.1"
   },
+  "electronmon": {
+    "patterns": ["!data/**"]
+  },
   "homepage": "./",
   "main": "./main/electron.js",
   "build": {
