@@ -40,10 +40,6 @@ function createWindow() {
       : `file://${path.join(__dirname, "../build/index.html")}`
   );
 
-  win.once("ready-to-show", () => {
-    win.show();
-  });
-
   // initialize hl7gate and all business logic routes
   const gateControls = require(path.join(__dirname, "./hl7Gate"))(win);
   require(path.join(__dirname, "./ipcRoutes"))(win, gateControls);
