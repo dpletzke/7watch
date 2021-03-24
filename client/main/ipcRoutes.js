@@ -4,14 +4,20 @@ const { replaceDatabase, retrievePreviousState } = require("./db/db.js");
 module.exports = (window, gateControls) => {
   let win = window;
   const { startGate, stopGate } = gateControls;
-  // TODO implement in renderer listen previous state
-  retrievePreviousState()
-    .then((appState) => {
-      win.webContents.send("previous_state", appState);
-    })
-    .catch((err) => {
-      console.error(err);
-    });
+
+  win.once("ready-to-show", () => {
+    console.log("ready-to-show");
+    retrievePreviousState()
+      .then((appState) => {
+        console.log("sending previous state ", appState);
+        win.webContents.send("set_previous_state_after_open", appState);
+        win.show();
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  });
+
   /**
    * since we redirect the close event, set a timer to close the app
    * if the renderer doesn't respond quick enough
@@ -34,7 +40,7 @@ module.exports = (window, gateControls) => {
     }
   });
 
-  ipcMain.on("save_before_closing", () => {
+  ipcMain.on("save_before_closing", (e, appState) => {
     clearTimeout(closeAssuranceTimer);
     console.log("here");
     replaceDatabase(appState)
@@ -42,12 +48,12 @@ module.exports = (window, gateControls) => {
         win = null;
         console.log("recieve save-before-closing");
         // TODO do we need this if there is already a events listener for all windows closed?
-        // if (process.platform !== "darwin") {
-        //   app.quit();
-        // }
+        if (process.platform !== "darwin") {
+          app.quit();
+        }
       })
       .catch((err) => {
-        console.errror(err);
+        console.error(err);
       });
   });
 
