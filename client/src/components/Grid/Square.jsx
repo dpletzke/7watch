@@ -9,6 +9,7 @@ const Square = observer((props) => {
 
   const [deviceId, observationId] = useMemo(() => {
     // offset row and column index for header columns
+    console.log('rerender', rowIndex - 1, columnIndex - 1)
     const ids = gridStore.getIds(rowIndex - 1, columnIndex - 1);
     return ids;
   }, [columnIndex, gridStore, rowIndex]);
