@@ -4,7 +4,6 @@ export function createLogsStore() {
   return {
     logs: [],
     addLog(log) {
-      console.log(log, this.logs);
       this.logs.push({
         ...log,
         id: nanoid(),
