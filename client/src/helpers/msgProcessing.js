@@ -16,12 +16,11 @@ export function msgToUpdates(msg) {
   const obxs = msg.segments.filter((seg) => seg.name === "OBX");
 
   // TODO test for no OBX's, ie no updates
-  console.log({ obr, obxs });
   return obxs.map((obx) => {
     return {
       deviceId: obr.fields.collectorIdentifier,
-      observationId: Number(obx.fields.observationIdentifier),
-      value: Number(obx.fields.value),
+      observationId: obx.fields.observationIdentifier,
+      value: obx.fields.value,
     };
   });
 }
