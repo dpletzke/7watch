@@ -1,7 +1,9 @@
+// import { toJS } from "mobx";
+
 /**
  * Observations that can be returning by devices, ie heart rate
  * @typedef {Object} Observation
- * @property {number} Observation.id - the OBX-3 identifier
+ * @property {string} Observation.id - the OBX-3 identifier
  * @property {string} Observation.common - a short, unique name
  * @property {string} Observation.full - the full name.
  */
@@ -14,25 +16,25 @@ export function createGridStore() {
      */
     grid: new Map(),
     /**
-     * @type {number[]}
+     * @type {string[]}
      */
     deviceIds: [],
     /**
      * track observation types known as OBX-3 in the HL7 protocol
-     * @type {Map<number, Observation>} - observation Ids
+     * @type {Map<string, Observation>} - observation Ids
      */
     observations: new Map(),
-    /**
-     * Add device ids to global tracker and add grid columns for
-     * each device/observation type with a starting value of null
-     * @param {number[]} newDeviceIds - device ids of new devices to track
-     */
     initializeState: function (appState) {
       const { deviceIds, observations, grid } = appState;
       this.deviceIds = deviceIds;
       this.observations = observations;
       this.grid = grid;
     },
+    /**
+     * Add device ids to global tracker and add grid columns for
+     * each device/observation type with a starting value of null
+     * @param {string[]} newDeviceIds - device ids of new devices to track
+     */
     addDevices: function (newDeviceIds) {
       if (!newDeviceIds) return null;
 
@@ -64,7 +66,7 @@ export function createGridStore() {
     },
     /**
      *
-     * @param {number[]} deviceIdsToRemove - array of device ids to remove
+     * @param {string[]} deviceIdsToRemove - array of device ids to remove
      */
     removeDevices: function (deviceIdsToRemove) {
       this.deviceIds = this.deviceIds.filter((dId) => {
@@ -80,7 +82,7 @@ export function createGridStore() {
     },
     /**
      *
-     * @param {number[]} observationsToRemove - array of observations to remove
+     * @param {string[]} observationsToRemove - array of observations to remove
      */
     removeObservations: function (observationsToRemove) {
       if (!observationsToRemove) return null;
@@ -98,7 +100,7 @@ export function createGridStore() {
      * batched updates of dId-obId values
      * @param {Object[]} updates
      * @param {string} updates[].deviceId
-     * @param {number} updates[].observationId
+     * @param {string} updates[].observationId
      * @param {number|string} updates[].value
      */
     updateValues: function (updates) {
