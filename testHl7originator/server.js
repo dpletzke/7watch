@@ -8,9 +8,10 @@ const messages = [
   { device: "ICCURM7108", obxs: [102, 104] },
 ];
 
+const PORT = 7001;
 const client = hl7.Server.createTcpClient({
   host: "localhost",
-  port: 7001,
+  port: PORT,
   keepalive: true,
   /**
    * this library's Tcp client expects an acknowledgement and will print
@@ -148,4 +149,5 @@ const startMessageCycle = (messages) => {
   sendNextMessageRecursive(headMessage);
 };
 
+console.log("test server sending messages on port", PORT);
 startMessageCycle(messages);
