@@ -7,6 +7,7 @@ import GateControls from "../components/ConfigCards/GateControls";
 import SetConfig from "../components/ConfigCards/SetConfig";
 import EditDevices from "../components/ConfigCards/EditDevices";
 import EditObservations from "../components/ConfigCards/EditObservations";
+import SetGridFromFiles from "../components/ConfigCards/SetGridFromFiles";
 
 function Config() {
   return (
@@ -19,6 +20,7 @@ function Config() {
         <Col md="8">
           <EditDevices />
           <EditObservations />
+          <SetGridFromFiles />
         </Col>
       </Row>
     </Container>

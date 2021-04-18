@@ -18,7 +18,7 @@ const client = hl7.Server.createTcpClient({
    * an error here if not, but it doesn't seem to effect the functionality
    * error text is "Can't send while awaiting response"
    * TODO try to use the "file" not "tcp" client in the library which
-   * TODO apparently doesn't expect an ack
+   * apparently doesn't expect an ack
    */
   callback: function (err, ack) {
     // if (err) {
