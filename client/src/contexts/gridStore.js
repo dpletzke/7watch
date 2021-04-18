@@ -1,4 +1,4 @@
-// import { toJS } from "mobx";
+import { toJS } from "mobx";
 
 /**
  * Observations that can be returning by devices, ie heart rate
@@ -87,8 +87,9 @@ export function createGridStore() {
     removeObservations: function (observationsToRemove) {
       if (!observationsToRemove) return null;
       console.log(observationsToRemove);
+      console.log(toJS(this.observations));
       observationsToRemove.forEach((observation) => {
-        this.observations.delete(observation.id);
+        this.observations.delete(observation);
       });
       observationsToRemove.forEach(({ id: obId }) => {
         this.deviceIds.forEach((dId) => {
