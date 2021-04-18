@@ -7,16 +7,19 @@
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^12.8.1",
+    "bootstrap": "^4.6.0",
     "chartist": "^0.11.4",
     "cross-env": "^7.0.3",
     "dom-helpers": "^5.2.0",
     "electron-is-dev": "^1.2.0",
     "immutable": "^4.0.0-rc.12",
+    "mobx": "^6.2.0",
     "mobx-react-lite": "^3.2.0",
     "nedb-promises": "^4.1.1",
     "node-sass": "^5.0.0",
     "prop-types": "^15.7.2",
     "react": "^17.0.1",
+    "react-bootstrap": "^1.5.2",
     "react-chartist": "^0.14.4",
     "react-dom": "^17.0.1",
     "react-notification-alert": "0.0.13",
@@ -65,7 +68,9 @@
     "wait-on": "^5.2.1"
   },
   "electronmon": {
-    "patterns": ["!data/**"]
+    "patterns": [
+      "!data/**"
+    ]
   },
   "homepage": "./",
   "main": "./main/electron.js",
