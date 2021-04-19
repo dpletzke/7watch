@@ -25,7 +25,7 @@ const db = {
  */
 const pack = {
   devices: (deviceIds) => {
-    return deviceIds.map((dId) => {
+    return Array.from(deviceIds.values()).map((dId) => {
       return { deviceId: dId };
     });
   },
@@ -47,9 +47,10 @@ const pack = {
  */
 const unpack = {
   devices: (deviceIds) => {
-    return deviceIds.map(({ deviceId }) => {
-      return deviceId;
-    });
+    return deviceIds.reduce((acc, { deviceId }) => {
+      acc.add(deviceId);
+      return acc;
+    }, new Set());
   },
   observations: (observations) => {
     return observations.reduce((acc, observation) => {
@@ -69,12 +70,8 @@ const unpack = {
 };
 
 const replaceData = (db, data) => {
-  console.log({ data });
   return db.remove({}, { multi: true }).then((result) => {
-    console.log({ removeResult: result });
-    return db.insert(data).then((result) => {
-      console.log({ insertResult: result });
-    });
+    return db.insert(data);
   });
 };
 
@@ -85,7 +82,6 @@ const replaceDatabase = (appState) => {
     devices: pack.devices(devices),
     observations: pack.observations(observations),
     grid: pack.grid(grid),
-    // devices: packDevices(devices),
   };
 
   return Promise.all([
