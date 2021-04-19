@@ -1,4 +1,7 @@
 const { app, ipcMain } = require("electron");
+const isDev = require("electron-is-dev");
+const fs = require("fs").promises;
+
 const { replaceDatabase, retrievePreviousState } = require("./db/db.js");
 
 module.exports = (window, gateControls) => {
@@ -11,7 +14,13 @@ module.exports = (window, gateControls) => {
       .then((appState) => {
         console.log("sending previous state ", appState);
         win.webContents.send("set_previous_state_after_open", appState);
-        win.show();
+        if (isDev) {
+          win.showInactive();
+          win.minimize();
+        } else {
+          win.show();
+          win.maximize();
+        }
       })
       .catch((err) => {
         console.error(err);
@@ -63,5 +72,9 @@ module.exports = (window, gateControls) => {
 
   ipcMain.handle("stop_gate", () => {
     return stopGate();
+  });
+
+  ipcMain.handle("read_file", (event, filePath) => {
+    return fs.readFile(filePath, "utf-8");
   });
 };
