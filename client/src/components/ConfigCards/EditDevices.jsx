@@ -22,7 +22,6 @@ const EditDevices = observer(() => {
   const handleRemove = (deviceId) => {
     return (e) => {
       e.preventDefault();
-      console.log("here");
       gridStore.removeDevices([deviceId]);
     };
   };
