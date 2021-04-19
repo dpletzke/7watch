@@ -1,18 +1,40 @@
-import React, { useState } from "react";
+import React from "react";
 import Card from "react-bootstrap/Card";
 import Container from "react-bootstrap/esm/Container";
 
 import UploadFile from "./UploadFile";
 
-import { specifyConfig, config } from "../../config";
-import { useGateStore } from "../../contexts";
+import * as ipc from "../../helpers/ipcHelpers";
+import { useGridStore } from "../../contexts";
 
 function SetGridFromFiles() {
-  const gate = useGateStore();
+  const gridStore = useGridStore();
+
+  const parse = {
+    devices: (data) => data.split("\n").slice(1),
+    observations: (data) => {
+      const [headers, ...rows] = data.split("\n");
+      return rows.map((ob) => {
+        const [id, common, full] = ob.split(",");
+        return { id, common, full };
+      });
+    },
+  };
 
   const fileInputs = [
-    { name: "devicePath", title: "DeviceIds" },
-    { name: "observationPath", title: "Observations" },
+    {
+      name: "devicePath",
+      title: "DeviceIds",
+      sendFilePath: ipc.readFile,
+      dataHandler: (data) => gridStore.addDevices(parse.devices(data)),
+    },
+    {
+      name: "observationPath",
+      title: "Observations",
+      sendFilePath: ipc.readFile,
+      dataHandler: (data) =>
+        gridStore.addObservations(parse.observations(data)),
+    },
   ];
 
   return (
