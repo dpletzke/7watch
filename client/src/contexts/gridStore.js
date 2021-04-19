@@ -38,6 +38,7 @@ export function createGridStore() {
     addDevices: function (deviceIdsToAdd) {
       if (!deviceIdsToAdd) return null;
       //filter array for ids that we don't have already
+      //we generate this because we add grid keys based on the new deviceids
       const newDeviceIds = deviceIdsToAdd.filter(
         (id) => !this.deviceIds.has(id)
       );
