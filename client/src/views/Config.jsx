@@ -18,9 +18,9 @@ function Config() {
           <SetConfig />
         </Col>
         <Col md="8">
+          <SetGridFromFiles />
           <EditDevices />
           <EditObservations />
-          <SetGridFromFiles />
         </Col>
       </Row>
     </Container>
