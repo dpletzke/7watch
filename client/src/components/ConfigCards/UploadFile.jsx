@@ -4,13 +4,20 @@ import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 
 function UploadFile(props) {
-  const { name, title } = props.details;
+  const { name, title, sendFilePath, dataHandler } = props.details;
 
-  const [fileName, setFileName] = useState("Upload Boundary File");
+  const [file, setFile] = useState();
 
   const handleSubmit = (e) => {
-    console.log(e.target, e.target.files, fileName);
     e.preventDefault();
+    console.log(file);
+    sendFilePath(file.path)
+      .then((data) => {
+        dataHandler(data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
   return (
     <Form onSubmit={handleSubmit} inline>
@@ -18,9 +25,9 @@ function UploadFile(props) {
         <Form.File
           className="position-relative"
           required
-          name="file"
-          label="File"
-          onChange={(e) => setFileName(e.target.files[0].name)}
+          name={title}
+          label={title}
+          onChange={(e) => setFile(e.target.files[0])}
           id={name}
         />
       </Form.Group>
