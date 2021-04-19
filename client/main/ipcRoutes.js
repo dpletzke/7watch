@@ -51,7 +51,7 @@ module.exports = (window, gateControls) => {
 
   ipcMain.on("save_before_closing", (e, appState) => {
     clearTimeout(closeAssuranceTimer);
-    console.log("here");
+    console.log("saving state ", appState);
     replaceDatabase(appState)
       .then(() => {
         win = null;
