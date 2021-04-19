@@ -31,9 +31,9 @@ const EditDevices = observer(() => {
     setNewDevice(e.target.value);
   };
 
-  const deviceRow = (deviceId) => {
+  const deviceRow = (deviceId, i) => {
     return (
-      <Form key={deviceId} onSubmit={handleRemove(deviceId)}>
+      <Form key={`${deviceId}-${i}`} onSubmit={handleRemove(deviceId)}>
         <Row>
           <Form.Group controlId={deviceId}>
             <Form.Control plaintext readOnly name={deviceId} value={deviceId} />
@@ -53,7 +53,7 @@ const EditDevices = observer(() => {
       </Card.Header>
       <Card.Body>
         <Container>
-          {gridStore.deviceIds.map((dId) => deviceRow(dId))}
+          {Array.from(gridStore.deviceIds).map((dId, i) => deviceRow(dId, i))}
           <Form onSubmit={handleAdd}>
             <Row>
               <Form.Group>
