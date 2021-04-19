@@ -60,7 +60,7 @@ test("addDevices correctly appends to devices and grid", () => {
   const gridKeys = Array.from(gridStore.grid.keys());
   const gridValues = Array.from(gridStore.grid.values());
 
-  expect(gridStore.deviceIds.length).toEqual(testDevices.length);
+  expect(gridStore.deviceIds.size).toEqual(testDevices.length);
   expect(gridStore.grid.size).toEqual(
     testDevices.length * testObservations.length
   );

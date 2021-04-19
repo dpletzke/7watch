@@ -16,9 +16,9 @@ export function createGridStore() {
      */
     grid: new Map(),
     /**
-     * @type {string[]}
+     * @type {Set<string>}
      */
-    deviceIds: [],
+    deviceIds: new Set(),
     /**
      * track observation types known as OBX-3 in the HL7 protocol
      * @type {Map<string, Observation>} - observation Ids
@@ -35,10 +35,13 @@ export function createGridStore() {
      * each device/observation type with a starting value of null
      * @param {string[]} newDeviceIds - device ids of new devices to track
      */
-    addDevices: function (newDeviceIds) {
-      if (!newDeviceIds) return null;
-
-      this.deviceIds.push(...newDeviceIds);
+    addDevices: function (deviceIdsToAdd) {
+      if (!deviceIdsToAdd) return null;
+      //filter array for ids that we don't have already
+      const newDeviceIds = deviceIdsToAdd.filter(
+        (id) => !this.deviceIds.has(id)
+      );
+      newDeviceIds.forEach((id) => this.deviceIds.add(id));
 
       const observationIds = Array.from(this.observations.keys());
       newDeviceIds.forEach((dId) => {
@@ -52,14 +55,17 @@ export function createGridStore() {
      * each device with a starting value of null
      * @param {Observation[]} newObservations - new observations to track
      */
-    addObservations: function (newObservations) {
-      if (!newObservations) return null;
-
+    addObservations: function (observationsToAdd) {
+      if (!observationsToAdd) return null;
+      //filter array for ids that we don't have already
+      const newObservations = observationsToAdd.filter(
+        ({ id }) => !this.observations.has(id)
+      );
       newObservations.forEach((observation) => {
         this.observations.set(observation.id, observation);
       });
       newObservations.forEach(({ id: obId }) => {
-        this.deviceIds.forEach((dId) => {
+        Array.from(this.deviceIds).forEach((dId) => {
           this.grid.set(`${dId}-${obId}`, null);
         });
       });
@@ -69,9 +75,7 @@ export function createGridStore() {
      * @param {string[]} deviceIdsToRemove - array of device ids to remove
      */
     removeDevices: function (deviceIdsToRemove) {
-      this.deviceIds = this.deviceIds.filter((dId) => {
-        return !deviceIdsToRemove.includes(dId);
-      });
+      deviceIdsToRemove.forEach((id) => this.deviceIds.delete(id));
 
       const observationIds = Array.from(this.observations.keys());
       deviceIdsToRemove.forEach((dId) => {
@@ -86,13 +90,12 @@ export function createGridStore() {
      */
     removeObservations: function (observationsToRemove) {
       if (!observationsToRemove) return null;
-      console.log(observationsToRemove);
-      console.log(toJS(this.observations));
       observationsToRemove.forEach((observation) => {
         this.observations.delete(observation);
       });
+      const deviceIds = Array.from(this.deviceIds);
       observationsToRemove.forEach(({ id: obId }) => {
-        this.deviceIds.forEach((dId) => {
+        deviceIds.forEach((dId) => {
           this.grid.delete(`${dId}-${obId}`);
         });
       });
@@ -106,12 +109,12 @@ export function createGridStore() {
      */
     updateValues: function (updates) {
       updates.forEach(({ deviceId, observationId, value }) => {
-        if (!Array.from(this.observations.keys()).includes(observationId)) {
+        if (!this.observations.has(observationId)) {
           // suggest to user to add new observation
           console.error("no valid entry for observation");
           return;
         }
-        if (!this.deviceIds.includes(deviceId)) {
+        if (!this.deviceIds.has(deviceId)) {
           // suggest to user to add new device
           console.error("no valid entry for device");
           return;
@@ -132,7 +135,7 @@ export function createGridStore() {
       return this.grid.get(key);
     },
     getIds: function (deviceIdIndex, observationIdIndex) {
-      const deviceId = this.deviceIds[deviceIdIndex];
+      const deviceId = Array.from(this.deviceIds)[deviceIdIndex];
 
       const observationId = Array.from(this.observations.keys())[
         observationIdIndex

@@ -52,7 +52,7 @@ const GridContainer = observer(() => {
           enableFixedRowScroll
           height={height}
           rowHeight={20}
-          rowCount={gridStore.deviceIds.length + 1}
+          rowCount={gridStore.deviceIds.size + 1}
           style={STYLE}
           styleBottomLeftGrid={STYLE_BOTTOM_LEFT_GRID}
           styleTopLeftGrid={STYLE_TOP_LEFT_GRID}
