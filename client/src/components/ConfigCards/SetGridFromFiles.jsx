@@ -10,10 +10,14 @@ import { useGridStore } from "../../contexts";
 function SetGridFromFiles() {
   const gridStore = useGridStore();
 
+  //prepare data from csv for adding to the store
   const parse = {
-    devices: (data) => data.split("\n").slice(1),
+    devices: (data) => {
+      const [headers, ...rows] = data.split(/[\r\n]+/g);
+      return rows;
+    },
     observations: (data) => {
-      const [headers, ...rows] = data.split("\n");
+      const [headers, ...rows] = data.split(/[\r\n]+/g);
       return rows.map((ob) => {
         const [id, common, full] = ob.split(",");
         return { id, common, full };
