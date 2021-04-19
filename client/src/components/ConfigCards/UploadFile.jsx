@@ -10,7 +10,6 @@ function UploadFile(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(file);
     sendFilePath(file.path)
       .then((data) => {
         dataHandler(data);
