@@ -32,7 +32,7 @@ export const GridProvider = ({ children }) => {
      */
     const appOpeningListener = action((e, previousState) => {
       const { devices, observations, grid, config } = previousState;
-      console.log("setting preivous state", previousState);
+      console.log("setting previous state", previousState);
       gridStore.initializeState({ deviceIds: devices, observations, grid });
     });
     ipcRenderer.on("set_previous_state_after_open", appOpeningListener);
