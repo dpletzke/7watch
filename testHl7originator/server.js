@@ -2,10 +2,12 @@ const hl7 = require("simple-hl7");
 
 // fixtures
 const messages = [
-  { device: "CARDECHO", obxs: [101, 103] },
-  { device: "ENDOMONITOR130069", obxs: [102, 104] },
-  { device: "ANMONITOR35901", obxs: [101, 103] },
-  { device: "ICCURM7108", obxs: [102, 104] },
+  { device: "CARDBAY1", obxs: [2, 3] },
+  { device: "CARDBAY2", obxs: [2, 3] },
+  { device: "CARDECHO", obxs: [73] },
+  { device: "CARDSTRESSRM2", obxs: [73, 519, 635] },
+  { device: "CARDSTRESSRM3", obxs: [73, 519, 635] },
+  { device: "CARDSTRESSRM5", obxs: [73, 519, 635] },
 ];
 
 const PORT = 7001;
