@@ -1,5 +1,6 @@
 import { toJS } from "mobx";
-
+import deviceRef from "../helpers/deviceRef";
+import variableIdRef from "../helpers/variableIdRef";
 /**
  * Observations that can be returning by devices, ie heart rate
  * @typedef {Object} Observation
@@ -29,6 +30,16 @@ export function createGridStore() {
       this.deviceIds = deviceIds;
       this.observations = observations;
       this.grid = grid;
+    },
+    getDeviceFromIndex: function (index) {
+      const deviceId = Array.from(this.deviceIds)[index];
+      return deviceId;
+    },
+    getObservationFromIndex: function (index) {
+      const values = toJS(this.observations.keys());
+      const observations = Array.from(values);
+      const id = observations[index];
+      return toJS(this.observations.get(id));
     },
     /**
      * Add device ids to global tracker and add grid columns for
@@ -100,6 +111,11 @@ export function createGridStore() {
           this.grid.delete(`${dId}-${obId}`);
         });
       });
+    },
+    destroyAll: function () {
+      this.observations.clear();
+      this.deviceIds.clear();
+      this.grid.clear();
     },
     /**
      * batched updates of dId-obId values
