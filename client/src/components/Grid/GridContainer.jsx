@@ -73,7 +73,7 @@ const GridContainer = observer(() => {
           scrollToColumn={0}
           scrollToRow={0}
           cellRenderer={_cellRenderer}
-          columnWidth={({ index }) => (index === 0 ? 150 : 50)}
+          columnWidth={({ index }) => (index === 0 ? 150 : 100)}
           columnCount={gridStore.observations.size + 1}
           enableFixedColumnScroll
           enableFixedRowScroll
