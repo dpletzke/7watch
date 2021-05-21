@@ -1,6 +1,8 @@
 {
   "name": "7watch",
   "version": "0.1.0",
+  "author": "dpletzke@protonmail.com",
+  "description": "Electron dashboard for parsing and viewing Hl7 messages",
   "private": true,
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.2",
@@ -73,18 +75,16 @@
     ]
   },
   "homepage": "./",
-  "main": "./main/electron.js",
+  "main": "./public/electron.js",
   "build": {
     "appId": "com.electron.7watch",
     "productName": "7watch",
     "files": [
       "build/**/*",
-      "node_modules/**/*",
-      "src/assets/**/*",
-      "src/layouts/*"
+      "node_modules/**/*"
     ],
     "directories": {
-      "buildResources": "public"
+      "buildResources": "assets"
     },
     "mac": {
       "target": "dmg",

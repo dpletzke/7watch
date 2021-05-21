@@ -41,8 +41,8 @@ function createWindow() {
   );
 
   // initialize hl7gate and all business logic routes
-  const gateControls = require(path.join(__dirname, "./hl7Gate"))(win);
-  require(path.join(__dirname, "./ipcRoutes"))(win, gateControls);
+  const gateControls = require(path.join(__dirname, "./main/hl7Gate"))(win);
+  require(path.join(__dirname, "./main/ipcRoutes"))(win, gateControls);
 
   // any new windows that are opened (ie with a web link) open in default browser
   win.webContents.on("new-window", (e, url) => {
